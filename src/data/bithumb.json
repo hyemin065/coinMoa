@@ -1,0 +1,12 @@
+[
+  {
+    "id": "aave",
+    "symbol": "aave",
+    "name": "Aave",
+    "image": "https://assets.coingecko.com/coins/images/12645/large/AAVE.png?1601374110",
+    "markets" : "bithumb",
+    "buy_price": 120000,
+    "current" : "krw",
+    "buy_date": "2022-05-21"    
+  } 
+]

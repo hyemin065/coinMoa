@@ -1,0 +1,23 @@
+[
+  {
+    "id": "dogecoin",
+    "symbol": "doge",
+    "name": "Doge coin",
+    "image": "https://assets.coingecko.com/coins/images/5/thumb/dogecoin.png?1547792256",
+    "markets" : "upbit",
+    "buy_price": 70,
+    "current" : "krw",
+    "buy_date": "2022-05-05"    
+  },
+  {
+    "id": "eos",
+    "symbol": "eos",
+    "name": "EOS",
+    "image": "https://assets.coingecko.com/coins/images/738/thumb/eos-eos-logo.png?1547034481",
+    "markets" : "upbit",
+    "buy_price": 1900,
+    "current" : "krw",
+    "buy_date": "2022-04-23"
+  }
+ 
+]
