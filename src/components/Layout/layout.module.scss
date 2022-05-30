@@ -2,5 +2,6 @@
 @use '/src/styles/constants/colors';
 
 .main {
+  min-height: calc(100vh - 70px);
   padding: 60px 0;
 }

@@ -1,13 +1,19 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useRecoilState } from 'recoil';
-import { ArrowIcon } from '../../assets';
 import { modalState } from '../../recoil/recoil';
+import DateCalendar from '../DatePicker/DateCalendar';
 import styles from './modal.module.scss';
 
 const Modal = () => {
+  const [radioChecked, setRadioChecked] = useState('upbit');
+
   const [isOpenModal, setIsOpenModal] = useRecoilState(modalState);
   const modalRef = useRef<HTMLDivElement>(null);
+
+  const handleChangeChecked = (e: any) => {
+    setRadioChecked(e.currentTarget.value);
+  };
 
   const handleCloseModal = () => {
     setIsOpenModal(false);
@@ -31,30 +37,64 @@ const Modal = () => {
   return ReactDOM.createPortal(
     <div className={styles.modalWrap}>
       <div className={styles.modalContainer} ref={modalRef}>
-        <h3>거래소</h3>
-        <div className={styles.radioWrap}>
-          <label htmlFor='upbit'>업비트</label>
-          <input type='radio' value='업비트' name='radio' id='upbit' />
+        <div className={styles.modalContents}>
+          <h3>거래소</h3>
+          <div className={styles.radioWrap}>
+            <label htmlFor='upbit' className={styles.label}>
+              업비트
+              <input
+                type='radio'
+                value='upbit'
+                name='market'
+                id='upbit'
+                onChange={handleChangeChecked}
+                checked={radioChecked === 'upbit'}
+              />
+              <span className={styles.checkmark} />
+            </label>
 
-          <label htmlFor='bainane'>바이낸스</label>
-          <input type='radio' value='바이낸스' name='radio' id='bainane' />
+            <label htmlFor='bithumb' className={styles.label}>
+              빗썸
+              <input
+                type='radio'
+                value='bithumb'
+                name='market'
+                id='bithumb'
+                onChange={handleChangeChecked}
+                checked={radioChecked === 'bithumb'}
+              />
+              <span className={styles.checkmark} />
+            </label>
 
-          <label htmlFor='bit'>업비트</label>
-          <input type='radio' value='빗썸' name='radio' id='bit' />
-        </div>
-        <div>
-          <label htmlFor='buy'>매수가</label>
-          <input type='text' id='buy' />
-        </div>
-        <div>
-          <label htmlFor='buy'>날짜</label>
-          {/* datePicker */}
-        </div>
-        <div className={styles.buttonWrap}>
-          <button type='button'>추가</button>
-          <button type='button' onClick={handleCloseModal}>
-            취소
-          </button>
+            <label htmlFor='binance' className={styles.label}>
+              바이낸스
+              <input
+                type='radio'
+                value='binance'
+                name='market'
+                id='binance'
+                onChange={handleChangeChecked}
+                checked={radioChecked === 'binance'}
+              />
+              <span className={styles.checkmark} />
+            </label>
+          </div>
+
+          <h3>매수가</h3>
+          <div className={styles.inputWrap}>
+            <input type='text' placeholder='매수가를 입력해주세요' />
+          </div>
+
+          <h3>날짜</h3>
+          <div className={styles.dateWrap}>
+            <DateCalendar />
+          </div>
+          <div className={styles.buttonWrap}>
+            <button type='button'>추가</button>
+            <button type='button' onClick={handleCloseModal}>
+              취소
+            </button>
+          </div>
         </div>
       </div>
     </div>,

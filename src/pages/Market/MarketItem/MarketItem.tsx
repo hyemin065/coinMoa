@@ -42,7 +42,15 @@ const MarketItem = ({ current, item }: IProps) => {
       <td>{currentPrice !== '0' ? `${currentPrice}` : '-'}</td>
       <td>{highPrice !== '0' ? `${highPrice}` : '-'}</td>
       <td>{lowPrice !== '0' ? `${lowPrice}` : '-'}</td>
-      <td>{item.price_change_percentage_24h !== null ? `${item.price_change_percentage_24h}%` : '-'}</td>
+      <td
+        className={
+          item.price_change_percentage_24h !== null && item.price_change_percentage_24h > 0
+            ? `${styles.plus}`
+            : `${styles.minus}`
+        }
+      >
+        {item.price_change_percentage_24h !== null ? `${item.price_change_percentage_24h}%` : '-'}
+      </td>
       <td>{totalVolume !== '0' ? `${totalVolume}` : '-'}</td>
       <td>{marketCap !== '0' ? `${marketCap}` : '-'}</td>
     </tr>

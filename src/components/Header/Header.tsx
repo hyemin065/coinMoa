@@ -20,6 +20,10 @@ const Header = () => {
             포트폴리오
           </NavLink>
         </nav>
+        <div className={styles.sign}>
+          <NavLink to='signUp'>회원가입</NavLink>
+          <NavLink to='signIn'>로그인</NavLink>
+        </div>
       </div>
     </header>
   );

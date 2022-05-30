@@ -16,6 +16,14 @@ table {
         text-transform: uppercase;
       }
 
+      &.plus {
+        color: #04c28e;
+      }
+
+      &.minus {
+        color: #ed3756;
+      }
+
       dl {
         display: flex;
         align-items: center;
