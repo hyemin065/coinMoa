@@ -8,8 +8,10 @@ const Header = () => {
     <header className={styles.header}>
       <div className={styles.headerContainer}>
         <div className={styles.logo}>
-          <img src={logo} alt='logo' />
-          <h1>COINMOA</h1>
+          <h1>
+            <img src={logo} alt='logo' />
+            COINMOA
+          </h1>
         </div>
         <nav className={styles.nav}>
           <NavLink to='/' className={({ isActive }) => cx({ [styles.isActive]: isActive })}>

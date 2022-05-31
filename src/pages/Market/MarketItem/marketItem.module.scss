@@ -3,6 +3,8 @@
 table {
   tr {
     td {
+      font-size: 14px;
+
       &.bookMark {
         svg {
           width: 20px;
@@ -17,11 +19,11 @@ table {
       }
 
       &.plus {
-        color: #04c28e;
+        color: colors.$PLUS;
       }
 
       &.minus {
-        color: #ed3756;
+        color: colors.$MINUS;
       }
 
       dl {

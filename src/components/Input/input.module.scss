@@ -1,0 +1,41 @@
+@use '/src/styles/mixins/flexbox';
+@use '/src/styles/mixins/position';
+@use '/src/styles/constants/colors';
+
+.signLabel {
+  display: block;
+  padding: 10px 0 0;
+  font-size: 12px;
+  color: colors.$SUB_TEXT_COLOR;
+}
+
+.inputWrap {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 15px;
+  border-bottom: 1px solid colors.$WHITE;
+
+  > input {
+    width: 100%;
+    padding: 6px 0 7px;
+    color: colors.$WHITE;
+  }
+
+  > input:focus ~ .focused {
+    transform: scaleX(1);
+  }
+
+  .focused {
+    @include position.absolute(auto 0 -1px 0);
+    display: block;
+    border-bottom: 2px solid #ffc300;
+    transition: transform 300ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+    transform: scaleX(0);
+  }
+
+  button {
+    color: colors.$MAIN_COLOR;
+  }
+}

@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import Input from '../../components/Input/Input';
 import styles from './signUp.module.scss';
 
 const SignUp = () => {
@@ -9,6 +11,8 @@ const SignUp = () => {
   const [idCheckMsg, setIdCheckMsg] = useState('');
   const [passwordErrorMsg, setPasswordErrorMsg] = useState('');
   const [passwordConfirmErrorMsg, setPasswordConfirmErrorMsg] = useState('');
+
+  const navigate = useNavigate();
 
   const isIdColor = idCheckMsg.includes('중복') ? `${styles.error}` : `${styles.success}`;
 
@@ -48,6 +52,9 @@ const SignUp = () => {
   };
 
   const signUp = async () => {
+    if (id === '') {
+      setIdCheckMsg('아이디를 입력해주세요.');
+    }
     if (password.length < 8) {
       setPasswordErrorMsg('비밀번호가 8자리 이하입니다');
       return;
@@ -65,7 +72,7 @@ const SignUp = () => {
         userId: id,
         userPassword: password,
       });
-      console.log('회원가입 완료');
+      navigate('/signup/signupcompleted');
       setId('');
       setPassword('');
       setPasswordConfirm('');
@@ -76,28 +83,33 @@ const SignUp = () => {
 
   return (
     <section className={styles.signUpWrapper}>
-      <div>
-        <label htmlFor='id'>아이디</label>
-        <input type='text' id='id' value={id} onChange={handleChangeId} />
-        <button type='button' onClick={handleisCheckId}>
-          중복확인
-        </button>
+      <h2>회원 가입</h2>
+      <p>
+        이미 아이디가 있으신가요? <Link to='/signin'>로그인</Link>
+      </p>
+
+      <div className={styles.formGroup}>
+        <Input label='아이디' type='text' id='id' onChange={handleChangeId} check onClick={handleisCheckId} />
         <p className={isIdColor}>{idCheckMsg}</p>
       </div>
 
-      <div>
-        <label htmlFor='password'>비밀번호</label>
-        <input type='password' id='password' value={password} onChange={handleChangePassword} />
-        <span>{passwordErrorMsg}</span>
+      <div className={styles.formGroup}>
+        <Input label='비밀번호' type='password' id='password' onChange={handleChangePassword} check={false} />
+        <p className={styles.error}>{passwordErrorMsg}</p>
       </div>
 
-      <div>
-        <label htmlFor='passwordConfirm'>비밀번호확인</label>
-        <input type='password' id='passwordConfirm' value={passwordConfirm} onChange={handleChangePasswordConfirm} />
-        <span>{passwordConfirmErrorMsg}</span>
+      <div className={styles.formGroup}>
+        <Input
+          label='비밀번호확인'
+          type='password'
+          id='passwordConfirm'
+          onChange={handleChangePasswordConfirm}
+          check={false}
+        />
+        <p className={styles.error}>{passwordConfirmErrorMsg}</p>
       </div>
 
-      <button type='button' onClick={signUp} className={styles.signUpBtn}>
+      <button type='button' onClick={signUp} className={styles.signBtn}>
         회원가입
       </button>
     </section>

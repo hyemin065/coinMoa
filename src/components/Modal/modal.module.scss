@@ -41,7 +41,7 @@
           cursor: pointer;
 
           &:hover input ~ .checkmark {
-            background-color: #cccccc;
+            background-color: colors.$GRAYC;
           }
 
           input:checked ~ .checkmark {
@@ -59,7 +59,7 @@
             display: block;
             width: 16px;
             height: 16px;
-            background-color: #eeeeee;
+            background-color: colors.$GRAYE;
             border-radius: 50%;
 
             &::after {
@@ -68,7 +68,7 @@
               width: 8px;
               height: 8px;
               content: '';
-              background: white;
+              background: colors.$WHITE;
               border-radius: 50%;
             }
           }
