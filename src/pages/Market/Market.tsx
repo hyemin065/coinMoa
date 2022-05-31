@@ -15,7 +15,6 @@ const Market = () => {
   const [page, setPage] = useState(PAGINATION[0]);
 
   const isOpenModal = useRecoilValue(modalState);
-  console.log(isOpenModal);
   const currentText = current ? 'USD' : 'KRW';
 
   const getApiData = async () => {

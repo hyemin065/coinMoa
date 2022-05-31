@@ -5,7 +5,7 @@ export const modalState = atom<boolean>({
   default: false,
 });
 
-export const dropDownState = atom<string>({
-  key: 'dropDownState',
-  default: '업비트',
+export const isLoginState = atom<boolean>({
+  key: 'isLoginState',
+  default: false,
 });

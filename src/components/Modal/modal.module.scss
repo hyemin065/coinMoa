@@ -19,9 +19,9 @@
       padding: 40px 30px 10px;
 
       h3 {
-        margin-bottom: 15px;
-        font-size: 18px;
-        color: colors.$WHITE;
+        margin-bottom: 12px;
+        font-size: 14px;
+        color: colors.$SUB_TEXT_COLOR;
       }
 
       .radioWrap {
@@ -31,63 +31,23 @@
         width: 80%;
         margin-bottom: 40px;
         @include flexbox.flexbox(between, center);
-
-        .label {
-          position: relative;
-          display: block;
-          padding-left: 25px;
-          font-size: 14px;
-          color: colors.$WHITE;
-          cursor: pointer;
-
-          &:hover input ~ .checkmark {
-            background-color: colors.$GRAYC;
-          }
-
-          input:checked ~ .checkmark {
-            background-color: colors.$MAIN_COLOR;
-          }
-
-          input:checked ~ .checkmark::after {
-            display: block;
-          }
-
-          .checkmark {
-            position: absolute;
-            top: 0;
-            left: 0;
-            display: block;
-            width: 16px;
-            height: 16px;
-            background-color: colors.$GRAYE;
-            border-radius: 50%;
-
-            &::after {
-              @include position.absolute(4px auto auto 4px);
-              display: none;
-              width: 8px;
-              height: 8px;
-              content: '';
-              background: colors.$WHITE;
-              border-radius: 50%;
-            }
-          }
-        }
-      }
-
-      .inputWrap {
-        margin-bottom: 40px;
-
-        input {
-          width: 100%;
-          padding: 0 0 10px;
-          color: colors.$WHITE;
-          border-bottom: 1px solid colors.$SUB_COLOR;
-        }
       }
 
       .dateWrap {
         margin-bottom: 40px;
+      }
+
+      .inputWrap {
+        @include flexbox.flexbox(center, center);
+        padding: 0 0 10px;
+        margin-bottom: 40px;
+        border-bottom: 1px solid colors.$SUB_COLOR;
+
+        input {
+          width: 100%;
+          margin-left: 20px;
+          color: colors.$WHITE;
+        }
       }
     }
 
@@ -107,6 +67,38 @@
           color: #6f7888;
           background-color: transparent;
         }
+      }
+    }
+  }
+}
+
+.dropdown {
+  position: relative;
+
+  button {
+    @include flexbox.flexbox(center, center);
+    padding: 3px 8px 3px 0;
+    font-size: 16px;
+    color: colors.$WHITE;
+
+    svg {
+      width: 15px;
+      margin-left: 8px;
+      font-weight: bold;
+      fill: colors.$WHITE;
+    }
+  }
+
+  ul {
+    position: absolute;
+    top: 24px;
+    z-index: 9;
+    background-color: #202530;
+
+    li {
+      button {
+        font-size: 16px;
+        color: colors.$WHITE;
       }
     }
   }

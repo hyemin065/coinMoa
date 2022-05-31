@@ -46,6 +46,10 @@
     .sign {
       @include flexbox.flexbox(center, center);
 
+      .logout {
+        color: colors.$WHITE;
+      }
+
       > a {
         font-size: 14px;
         color: colors.$WHITE;

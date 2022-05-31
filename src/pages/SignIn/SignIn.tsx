@@ -1,42 +1,64 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 import Input from '../../components/Input/Input';
+import { isLoginState } from '../../recoil/recoil';
 import styles from './signIn.module.scss';
 
 const SignIn = () => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
-  const [idCheckMsg, setIdCheckMsg] = useState('');
+  const [idErrorMsg, setIdErrorMsg] = useState('');
+  const [passwordErrorMsg, setPasswordErrorMsg] = useState('');
+  const [loginFail, setloginFail] = useState('');
+  const isSetLogin = useSetRecoilState(isLoginState);
 
   const navigate = useNavigate();
 
   const handleChangeId = (e: any) => {
     const { value } = e.currentTarget;
     setId(value);
-
-    if (value === '') {
-      setIdCheckMsg('');
-    }
+    setloginFail('');
+    setIdErrorMsg('');
   };
 
   const handleChangePassword = (e: any) => {
     const { value } = e.currentTarget;
     setPassword(value);
+    setloginFail('');
+    setPasswordErrorMsg('');
   };
 
   const signIn = async () => {
-    try {
-      await axios.post('http://localhost:5000/users/signin', {
-        userId: id,
-        userPassword: password,
-      });
-      setId('');
-      setPassword('');
-      console.log('로그인 성공');
-      navigate('/');
-    } catch (error) {
-      console.log(error);
+    if (id === '') {
+      setIdErrorMsg('아이디를 입력해주세요');
+    }
+
+    if (password === '') {
+      setPasswordErrorMsg('비밀번호를 입력해주세요');
+    }
+
+    if (id !== '' && password !== '') {
+      try {
+        const res = await axios.post('http://localhost:5000/users/signin', {
+          userId: id,
+          userPassword: password,
+        });
+
+        const { data } = res;
+
+        const { _id: uniqueId } = data.user[0];
+
+        if (data.success) {
+          navigate('/');
+          localStorage.setItem('id', uniqueId);
+          isSetLogin(true);
+        }
+      } catch (error: any) {
+        setloginFail('로그인 실패');
+        throw new Error(error.response.data.message);
+      }
     }
   };
 
@@ -46,16 +68,18 @@ const SignIn = () => {
       <p>
         회원이 아니신가요? <Link to='/signup'>회원가입</Link>
       </p>
+
       <div className={styles.formGroup}>
         <Input label='아이디' type='text' id='id' onChange={handleChangeId} check={false} />
-
-        <p />
+        <p className={styles.error}>{idErrorMsg}</p>
       </div>
 
       <div className={styles.formGroup}>
         <Input label='비밀번호' type='password' id='password' onChange={handleChangePassword} check={false} />
-        <p />
+        <p className={styles.error}>{passwordErrorMsg}</p>
       </div>
+
+      <p className={styles.error}>{loginFail}</p>
 
       <button type='button' className={styles.signBtn} onClick={signIn}>
         로그인

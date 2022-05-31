@@ -10,6 +10,28 @@
   height: calc(100vh - 190px);
   margin: 0 auto;
 
+  .signUpSuccessWrap {
+    p {
+      width: 100%;
+      font-size: 20px;
+      color: colors.$WHITE;
+      @include flexbox.flexbox(center, center);
+    }
+
+    a {
+      display: block;
+      width: 200px;
+      height: 40px;
+      padding: 12px 10px;
+      margin: 40px auto 0;
+      font-weight: 600;
+      color: colors.$SUB_COLOR;
+      text-align: center;
+      background-color: colors.$WHITE;
+      border-radius: 4px;
+    }
+  }
+
   h2 {
     margin-bottom: 15px;
     font-size: 28px;

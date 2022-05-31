@@ -33,19 +33,12 @@
     > button {
       color: colors.$MAIN_COLOR;
     }
+  }
 
-    p {
-      margin-bottom: 20px;
-      font-size: 12px;
-
-      &.success {
-        color: colors.$PLUS;
-      }
-
-      &.error {
-        color: colors.$MINUS;
-      }
-    }
+  .error {
+    margin-bottom: 20px;
+    font-size: 12px;
+    color: colors.$MINUS;
   }
 
   .signBtn {
