@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
-import Input from '../../components/Input/Input';
+import SignInput from '../../components/SignInput/SignInput';
 import { isLoginState } from '../../recoil/recoil';
 import styles from './signIn.module.scss';
 
@@ -52,6 +52,7 @@ const SignIn = () => {
 
         if (data.success) {
           navigate('/');
+          localStorage.setItem('userId', data.user[0].userId);
           localStorage.setItem('id', uniqueId);
           isSetLogin(true);
         }
@@ -70,12 +71,12 @@ const SignIn = () => {
       </p>
 
       <div className={styles.formGroup}>
-        <Input label='아이디' type='text' id='id' onChange={handleChangeId} check={false} />
+        <SignInput label='아이디' type='text' id='id' onChange={handleChangeId} check={false} />
         <p className={styles.error}>{idErrorMsg}</p>
       </div>
 
       <div className={styles.formGroup}>
-        <Input label='비밀번호' type='password' id='password' onChange={handleChangePassword} check={false} />
+        <SignInput label='비밀번호' type='password' id='password' onChange={handleChangePassword} check={false} />
         <p className={styles.error}>{passwordErrorMsg}</p>
       </div>
 

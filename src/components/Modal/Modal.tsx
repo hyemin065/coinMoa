@@ -3,7 +3,7 @@ import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { ArrowIcon } from '../../assets';
-import { coinUpdateState, dateState, modalState } from '../../recoil/recoil';
+import { dateState, modalState } from '../../recoil/recoil';
 import { getCoinSearchApi } from '../../services/getCoinApi';
 import { ISearchCoin } from '../../types/coin';
 import DateCalendar from '../DatePicker/DateCalendar';
@@ -15,6 +15,7 @@ const TRANSACTION_CATEGORY = ['buy', 'sell'];
 
 const Modal = () => {
   const uniqueId = localStorage.getItem('id');
+
   const [searchValue, setSearchValue] = useState('');
   const [searchResult, setSearchResult] = useState<ISearchCoin[]>([]);
 
@@ -98,13 +99,12 @@ const Modal = () => {
     setIsShowSearchResult(false);
   };
 
-  const [transaction, setTransaction] = useState('매수가');
+  const [transaction, setTransaction] = useState('buy');
   const handleChangeTransaction = (item: any) => {
     setTransaction(item);
   };
 
   const date = useRecoilValue(dateState);
-  const [coinUpdateList, setCoinUpdateList] = useRecoilState(coinUpdateState);
 
   const bbb = async () => {
     try {
@@ -118,7 +118,7 @@ const Modal = () => {
       });
       const { data } = res;
       console.log(data);
-      // setCoinUpdateList(data);
+      setIsOpenModal(false);
     } catch (error) {
       console.log(error);
     }
@@ -168,7 +168,12 @@ const Modal = () => {
           <div className={styles.transactionWrap}>
             {TRANSACTION_CATEGORY.map((item) => {
               return (
-                <button key={Math.random() * 1000} type='button' onClick={() => handleChangeTransaction(item)}>
+                <button
+                  key={Math.random() * 1000}
+                  type='button'
+                  onClick={() => handleChangeTransaction(item)}
+                  className={transaction === item ? `${styles.active}` : ''}
+                >
                   {item === 'buy' ? '매수' : '매도'}
                 </button>
               );

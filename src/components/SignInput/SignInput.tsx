@@ -8,7 +8,7 @@ interface IProps {
   check: boolean;
   onClick?: any;
 }
-const Input = ({ label, type, id, onChange, check, onClick }: IProps) => {
+const SignInput = ({ label, type, id, onChange, check, onClick }: IProps) => {
   return (
     <>
       <label htmlFor={id} className={styles.signLabel}>
@@ -27,4 +27,4 @@ const Input = ({ label, type, id, onChange, check, onClick }: IProps) => {
   );
 };
 
-export default Input;
+export default SignInput;

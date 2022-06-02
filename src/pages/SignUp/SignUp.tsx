@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Input from '../../components/Input/Input';
+import SignInput from '../../components/SignInput/SignInput';
 import styles from './signUp.module.scss';
 
 const SignUp = () => {
@@ -108,17 +108,17 @@ const SignUp = () => {
             이미 아이디가 있으신가요? <Link to='/signin'>로그인</Link>
           </p>
           <div className={styles.formGroup}>
-            <Input label='아이디' type='text' id='id' onChange={handleChangeId} check onClick={handleisCheckId} />
+            <SignInput label='아이디' type='text' id='id' onChange={handleChangeId} check onClick={handleisCheckId} />
             <p className={isIdColor}>{idCheckMsg}</p>
           </div>
 
           <div className={styles.formGroup}>
-            <Input label='비밀번호' type='password' id='password' onChange={handleChangePassword} check={false} />
+            <SignInput label='비밀번호' type='password' id='password' onChange={handleChangePassword} check={false} />
             <p className={styles.error}>{passwordErrorMsg}</p>
           </div>
 
           <div className={styles.formGroup}>
-            <Input
+            <SignInput
               label='비밀번호확인'
               type='password'
               id='passwordConfirm'

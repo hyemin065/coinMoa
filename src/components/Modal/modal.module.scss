@@ -8,7 +8,7 @@
   background-color: rgba(0, 0, 0, 70%);
   transform: translate(-50%, -50%);
   @include flexbox.flexbox(center, center);
-  @include position.fixed(50% auto auto 50%);
+  @include position.absolute(50% auto auto 50%);
 
   input {
     width: 100%;
@@ -30,9 +30,6 @@
       }
 
       .radioWrap {
-        display: flex;
-        justify-self: space-between;
-        width: 100%;
         width: 80%;
         margin-bottom: 40px;
         @include flexbox.flexbox(between, center);
@@ -82,10 +79,10 @@
           width: 47%;
           padding: 10px;
           color: colors.$WHITE;
-          background-color: colors.$PLUS;
+          background-color: #6f7888;
           border-radius: 6px;
 
-          &:last-child {
+          &.active {
             background-color: colors.$MINUS;
           }
         }

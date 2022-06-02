@@ -1,5 +1,6 @@
 @use '/src/styles/constants/colors';
 @use '/src/styles/mixins/flexbox';
+@use '/src/styles/mixins/position';
 
 .container {
   width: 1200px;
@@ -12,10 +13,45 @@
     @include flexbox.flexbox(between, center);
 
     li {
+      position: relative;
       width: 280px;
       height: 115px;
-      border: 1px solid colors.$WHITE;
+      background-color: #1e1e1e;
       border-radius: 10px;
+
+      &::before {
+        @include position.absolute(0 auto auto 0);
+        display: block;
+        width: 6px;
+        height: 100%;
+        content: '';
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
+      }
+
+      &:first-child {
+        &::before {
+          background-color: colors.$PLUS;
+        }
+      }
+
+      &:nth-child(2) {
+        &::before {
+          background-color: #f0b90b;
+        }
+      }
+
+      &:nth-child(3) {
+        &::before {
+          background-color: #093687;
+        }
+      }
+
+      &:nth-child(4) {
+        &::before {
+          background-color: #fe9601;
+        }
+      }
 
       button {
         display: block;
@@ -54,7 +90,12 @@
       margin-bottom: 15px;
 
       button {
+        padding: 10px;
+        font-size: 14px;
         color: colors.$WHITE;
+        color: colors.$SUB_COLOR;
+        background-color: colors.$MAIN_COLOR;
+        border-radius: 6px;
       }
     }
 
@@ -63,9 +104,14 @@
       border-top: 1px solid #2f2f2f;
 
       tr {
+        th {
+          background: #181818;
+        }
+
         th,
         td {
           padding: 15px;
+          font-size: 14px;
           border-bottom: 1px solid #2f2f2f;
         }
       }

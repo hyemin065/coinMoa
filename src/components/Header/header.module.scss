@@ -32,13 +32,13 @@
     }
 
     .nav {
-      width: calc(100% - 330px);
+      width: calc(100% - 430px);
 
       a,
       button {
         padding: 0 10px;
         font-size: 14px;
-        font-weight: 700;
+        font-weight: 500;
         color: colors.$WHITE;
       }
     }
@@ -46,7 +46,16 @@
     .sign {
       @include flexbox.flexbox(center, center);
 
+      p {
+        font-size: 14px;
+        font-weight: 500;
+        color: colors.$WHITE;
+      }
+
       .logout {
+        margin-left: 20px;
+        font-size: 14px;
+        font-weight: 500;
         color: colors.$WHITE;
       }
 

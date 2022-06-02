@@ -1,17 +1,28 @@
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { cx } from '../../styles';
 import styles from './header.module.scss';
 import logo from '../../assets/coinmoa.png';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { isLoginState } from '../../recoil/recoil';
+import { useEffect } from 'react';
 
 const Header = () => {
-  const isLogin = useRecoilValue(isLoginState);
+  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
   const uniqueId = localStorage.getItem('id');
+  const userLoginId = localStorage.getItem('userId');
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem('id');
+    setIsLogin(false);
+    navigate('/');
   };
+
+  useEffect(() => {
+    if (uniqueId !== null && userLoginId !== null) {
+      setIsLogin(true);
+    }
+  }, [uniqueId, isLogin, setIsLogin, userLoginId]);
 
   return (
     <header className={styles.header}>
@@ -30,10 +41,13 @@ const Header = () => {
           </NavLink>
         </nav>
         <div className={styles.sign}>
-          {uniqueId ? (
-            <button type='button' className={styles.logout} onClick={handleLogout}>
-              로그아웃
-            </button>
+          {isLogin ? (
+            <>
+              <p>{`${userLoginId}님 환영합니다`}</p>
+              <button type='button' className={styles.logout} onClick={handleLogout}>
+                로그아웃
+              </button>
+            </>
           ) : (
             <>
               <NavLink to='signUp'>회원가입</NavLink>
