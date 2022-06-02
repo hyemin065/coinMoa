@@ -1,5 +1,5 @@
+import { ICoinMarketParams, ICoinSearchListParams, ICoinOnlyPriceParams } from '../types/coin';
 import axios from 'axios';
-import { ICoinMarketParams, ICoinSearchListParams } from '../types/coin';
 
 const BASE_URL = 'https://api.coingecko.com/api/v3';
 
@@ -28,6 +28,20 @@ export const getCoinSearchApi = async (params: ICoinSearchListParams) => {
       },
     });
     return res.data.coins;
+  } catch (error) {
+    throw new Error((error as Error).message);
+  }
+};
+
+export const getCoinOnlyPrice = async (params: ICoinOnlyPriceParams) => {
+  try {
+    const res = await axios.get(`${BASE_URL}/simple/price?`, {
+      params: {
+        ids: params.ids,
+        vs_currencies: params.vs_currencies,
+      },
+    });
+    return res.data;
   } catch (error) {
     throw new Error((error as Error).message);
   }

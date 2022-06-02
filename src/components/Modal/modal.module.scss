@@ -10,6 +10,11 @@
   @include flexbox.flexbox(center, center);
   @include position.fixed(50% auto auto 50%);
 
+  input {
+    width: 100%;
+    color: colors.$WHITE;
+  }
+
   .modalContainer {
     width: 360px;
     background-color: #202530;
@@ -31,10 +36,59 @@
         width: 80%;
         margin-bottom: 40px;
         @include flexbox.flexbox(between, center);
+
+        input {
+          display: none;
+        }
       }
 
       .dateWrap {
         margin-bottom: 40px;
+      }
+
+      .searchWrap {
+        position: relative;
+        margin-bottom: 40px;
+
+        > input {
+          padding: 0 0 10px;
+          border-bottom: 1px solid colors.$SUB_COLOR;
+        }
+
+        ul {
+          position: absolute;
+          z-index: 9;
+          width: 100%;
+          height: 200px;
+          overflow: auto;
+          background-color: #202530;
+
+          li {
+            button {
+              width: 100%;
+              padding: 5px;
+              color: colors.$WHITE;
+              text-align: left;
+            }
+          }
+        }
+      }
+
+      .transactionWrap {
+        margin-bottom: 40px;
+        @include flexbox.flexbox(between, center);
+
+        button {
+          width: 47%;
+          padding: 10px;
+          color: colors.$WHITE;
+          background-color: colors.$PLUS;
+          border-radius: 6px;
+
+          &:last-child {
+            background-color: colors.$MINUS;
+          }
+        }
       }
 
       .inputWrap {
@@ -44,9 +98,16 @@
         border-bottom: 1px solid colors.$SUB_COLOR;
 
         input {
-          width: 100%;
           margin-left: 20px;
-          color: colors.$WHITE;
+        }
+      }
+
+      .quantityWrap {
+        margin-bottom: 40px;
+
+        input {
+          padding: 0 0 10px;
+          border-bottom: 1px solid colors.$SUB_COLOR;
         }
       }
     }

@@ -3,14 +3,14 @@ import { useRecoilValue } from 'recoil';
 import Modal from '../../components/Modal/Modal';
 import { modalState } from '../../recoil/recoil';
 import { getCoinMarketApi } from '../../services/getCoinApi';
-import { ICoin } from '../../types/coin';
+import { IMarketCoin } from '../../types/coin';
 import styles from './market.module.scss';
 import MarketItem from './MarketItem/MarketItem';
 
 const PAGINATION = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const Market = () => {
-  const [coinList, setCoinList] = useState<ICoin[]>([]);
+  const [coinList, setCoinList] = useState<IMarketCoin[]>([]);
   const [current, setCurrent] = useState(false);
   const [page, setPage] = useState(PAGINATION[0]);
 
@@ -78,8 +78,7 @@ const Market = () => {
 
       <table>
         <colgroup>
-          <col width='3%' />
-          <col width='5%' />
+          <col width='8%' />
           <col width='16%' />
           <col width='6%' />
           <col width='10%' />
@@ -91,7 +90,6 @@ const Market = () => {
         </colgroup>
         <thead>
           <tr>
-            <th>&nbsp;</th>
             <th>#</th>
             <th colSpan={2}>코인</th>
             <th>현재가</th>
@@ -124,7 +122,6 @@ const Market = () => {
           );
         })}
       </ol>
-      {isOpenModal && <Modal />}
     </div>
   );
 };

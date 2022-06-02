@@ -1,18 +1,28 @@
+import axios from 'axios';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { ArrowIcon } from '../../assets';
-import { modalState } from '../../recoil/recoil';
+import { coinUpdateState, dateState, modalState } from '../../recoil/recoil';
+import { getCoinSearchApi } from '../../services/getCoinApi';
+import { ISearchCoin } from '../../types/coin';
 import DateCalendar from '../DatePicker/DateCalendar';
 import Radio from '../Radio/Radio';
 import styles from './modal.module.scss';
 
 const CURRENCY_CATEGORY = ['USD', 'KRW'];
+const TRANSACTION_CATEGORY = ['buy', 'sell'];
 
 const Modal = () => {
+  const uniqueId = localStorage.getItem('id');
+  const [searchValue, setSearchValue] = useState('');
+  const [searchResult, setSearchResult] = useState<ISearchCoin[]>([]);
+
   const [radioChecked, setRadioChecked] = useState('upbit');
-  const [buyPrice, setBuyPrice] = useState('');
+  const [transactionPrice, setTransactionPrice] = useState('');
+  const [quantity, setQuantity] = useState(0);
   const [isShowDropdown, setIsShowDropdown] = useState(false);
+  const [isShowSearchResult, setIsShowSearchResult] = useState(false);
   const [currency, setCurrency] = useState('USD');
 
   const [isOpenModal, setIsOpenModal] = useRecoilState(modalState);
@@ -22,6 +32,24 @@ const Modal = () => {
     return item !== currency;
   });
 
+  const handleSearchInputChange = async (e: any) => {
+    const { value } = e.currentTarget;
+    setSearchValue(value);
+    if (value !== '') {
+      const res = await getCoinSearchApi({
+        query: value,
+      });
+      setSearchResult(res);
+      if (res.length > 0) {
+        setIsShowSearchResult(true);
+      } else {
+        setIsShowSearchResult(false);
+      }
+    } else {
+      setIsShowSearchResult(false);
+    }
+  };
+
   const handleChangeChecked = (e: any) => {
     setRadioChecked(e.currentTarget.value);
   };
@@ -30,6 +58,10 @@ const Modal = () => {
     const { value } = e.currentTarget;
     setCurrency(value);
     setIsShowDropdown(false);
+  };
+  const handleChangeQuantity = (e: any) => {
+    const { value } = e.currentTarget;
+    setQuantity(value);
   };
 
   const handleClickDropdown = () => {
@@ -43,7 +75,7 @@ const Modal = () => {
   const handleChangePrice = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
     const removedCommaValue = Number(value.replaceAll(',', ''));
-    setBuyPrice(removedCommaValue.toLocaleString());
+    setTransactionPrice(removedCommaValue.toLocaleString());
   };
 
   useEffect(() => {
@@ -61,6 +93,38 @@ const Modal = () => {
     }
   };
 
+  const handleChangeSearchInput = (item: any) => {
+    setSearchValue(item);
+    setIsShowSearchResult(false);
+  };
+
+  const [transaction, setTransaction] = useState('매수가');
+  const handleChangeTransaction = (item: any) => {
+    setTransaction(item);
+  };
+
+  const date = useRecoilValue(dateState);
+  const [coinUpdateList, setCoinUpdateList] = useRecoilState(coinUpdateState);
+
+  const bbb = async () => {
+    try {
+      const res = await axios.post('http://localhost:5000/coin/update', {
+        userId: uniqueId,
+        apiCallName: searchValue,
+        average: Number(transactionPrice) * quantity,
+        quantity,
+        totalAmount: Number(transactionPrice) * quantity,
+        valuationAmount: 24000,
+      });
+      const { data } = res;
+      console.log(data);
+      // setCoinUpdateList(data);
+    } catch (error) {
+      console.log(error);
+    }
+
+    console.log(radioChecked, transaction, date, searchValue, currency, transactionPrice);
+  };
   return ReactDOM.createPortal(
     <div className={styles.modalWrap}>
       <div className={styles.modalContainer} ref={modalRef}>
@@ -77,7 +141,41 @@ const Modal = () => {
             <DateCalendar />
           </div>
 
-          <h3>매수가</h3>
+          <h3>코인이름</h3>
+          <div className={styles.searchWrap}>
+            <input
+              type='text'
+              value={searchValue}
+              onChange={handleSearchInputChange}
+              placeholder='코인을 입력해주세요'
+            />
+            {isShowSearchResult && (
+              <ul>
+                {searchResult.map((item) => {
+                  return (
+                    <li key={Math.random() * 1000}>
+                      <button type='button' onClick={() => handleChangeSearchInput(item.id)}>
+                        {item.id}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+
+          <h3>거래</h3>
+          <div className={styles.transactionWrap}>
+            {TRANSACTION_CATEGORY.map((item) => {
+              return (
+                <button key={Math.random() * 1000} type='button' onClick={() => handleChangeTransaction(item)}>
+                  {item === 'buy' ? '매수' : '매도'}
+                </button>
+              );
+            })}
+          </div>
+
+          <h3>거래가격</h3>
           <div className={styles.inputWrap}>
             <div className={styles.dropdown}>
               <button type='button' onClick={handleClickDropdown}>
@@ -94,11 +192,23 @@ const Modal = () => {
                 </ul>
               )}
             </div>
-            <input type='text' placeholder='매수가를 입력해주세요' value={buyPrice} onChange={handleChangePrice} />
+            <input
+              type='text'
+              placeholder='매수가를 입력해주세요'
+              value={transactionPrice}
+              onChange={handleChangePrice}
+            />
+          </div>
+
+          <h3>수량</h3>
+          <div className={styles.quantityWrap}>
+            <input type='number' placeholder='수량을 입력해주세요' onChange={handleChangeQuantity} value={quantity} />
           </div>
 
           <div className={styles.buttonWrap}>
-            <button type='button'>추가</button>
+            <button type='button' onClick={bbb}>
+              추가
+            </button>
             <button type='button' onClick={handleCloseModal}>
               취소
             </button>

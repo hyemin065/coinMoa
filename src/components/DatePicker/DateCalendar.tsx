@@ -1,13 +1,15 @@
 import dayjs from 'dayjs';
 import { useEffect, useRef, useState } from 'react';
 import Calendar from 'react-calendar';
+import { useSetRecoilState } from 'recoil';
+import { dateState } from '../../recoil/recoil';
 import './Calendar.css';
 import styles from './dateCalendar.module.scss';
 
 const DateCalendar = () => {
-  const [value, onChange] = useState(new Date());
+  const [value, setValue] = useState(new Date());
   const [isShowCalendar, setIsShowCalendar] = useState(false);
-
+  const setDate = useSetRecoilState(dateState);
   const SelectDate = dayjs(value).format('YYYY-MM-DD');
 
   const modalRef = useRef<HTMLDivElement>(null);
@@ -17,6 +19,7 @@ const DateCalendar = () => {
 
   useEffect(() => {
     setIsShowCalendar(false);
+    setDate(SelectDate);
   }, [value]);
 
   useEffect(() => {
@@ -39,7 +42,7 @@ const DateCalendar = () => {
       <button type='button' onClick={handleShowCalendar} className={styles.dateButton}>
         {SelectDate}
       </button>
-      {isShowCalendar && <Calendar onChange={onChange} value={value} />}
+      {isShowCalendar && <Calendar onChange={setValue} value={value} />}
     </div>
   );
 };
