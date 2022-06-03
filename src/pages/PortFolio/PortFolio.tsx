@@ -36,7 +36,7 @@ const PortFolio = () => {
 
   const getPortFolio = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/coin/getCoin/${uniqueId}`);
+      const res = await axios.get(`https://coin-moa.herokuapp.com/coin/getCoin/${uniqueId}`);
       const { coin } = res.data;
       const coinName = coin.map((item: any) => item.apiCallName).join(',');
 

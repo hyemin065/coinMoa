@@ -41,7 +41,7 @@ const SignUp = () => {
   const handleisCheckId = async () => {
     if (id !== '') {
       try {
-        const res = await axios.post('http://localhost:5000/users/ischeckId', {
+        const res = await axios.post('https://coin-moa.herokuapp.com/users/ischeckId', {
           userId: id,
         });
         const { data } = res;
@@ -82,7 +82,7 @@ const SignUp = () => {
 
     if (idDuplicateCheck && password.length >= 8 && passwordConfirm === password) {
       try {
-        await axios.post('http://localhost:5000/users/signup', {
+        await axios.post('https://coin-moa.herokuapp.com/users/signup', {
           userId: id,
           userPassword: password,
         });

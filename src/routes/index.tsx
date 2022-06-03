@@ -1,7 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import Header from '../components/Header/Header';
 import Layout from '../components/Layout/Layout';
-import Example from '../pages/Example';
 import Market from '../pages/Market/Market';
 import PortFolio from '../pages/PortFolio/PortFolio';
 import SignIn from '../pages/SignIn/SignIn';
@@ -19,7 +18,6 @@ const RootRoute = () => {
           <Route path='portfolio' element={<PortFolio />} />
           <Route path='signup' element={<SignUp />} />
           <Route path='signin' element={<SignIn />} />
-          <Route path='example' element={<Example />} />
         </Route>
       </Routes>
     </>

@@ -122,10 +122,9 @@ const Modal = () => {
     const aa = userCoinList.filter((item) => {
       return item.market === marketValue && item.apiCallName === searchValueId;
     });
-    console.log(aa);
     if (aa.length > 0) {
       try {
-        const res = await axios.post('http://localhost:5000/coin/update', {
+        const res = await axios.post('https://coin-moa.herokuapp.com/coin/update', {
           userId: uniqueId,
           apiCallName: searchValueId,
           market: marketValue,
@@ -147,8 +146,6 @@ const Modal = () => {
         const { coin } = res.data;
         window.location.reload();
 
-        console.log(coin);
-
         setIsOpenModal(false);
       } catch (error) {
         console.log(error);
@@ -156,7 +153,7 @@ const Modal = () => {
 
       if (transaction === 'sell' && aa[0].quantity - quantity <= 0) {
         try {
-          const res = await axios.post('http://localhost:5000/coin/delete', {
+          const res = await axios.post('https://coin-moa.herokuapp.com/coin/delete', {
             userId: uniqueId,
             apiCallName: searchValueId,
             market: marketValue,
@@ -168,7 +165,7 @@ const Modal = () => {
       }
     } else {
       try {
-        const res = await axios.post('http://localhost:5000/coin/coinAdd', {
+        const res = await axios.post('https://coin-moa.herokuapp.com/coin/coinAdd', {
           userId: uniqueId,
           apiCallName: searchValueId,
           market: marketValue,
