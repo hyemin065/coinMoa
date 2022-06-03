@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import Modal from '../../components/Modal/Modal';
-import { modalState } from '../../recoil/recoil';
+
 import { getCoinMarketApi } from '../../services/getCoinApi';
 import { IMarketCoin } from '../../types/coin';
-import styles from './market.module.scss';
 import MarketItem from './MarketItem/MarketItem';
+
+import styles from './market.module.scss';
 
 const PAGINATION = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -14,8 +13,15 @@ const Market = () => {
   const [current, setCurrent] = useState(false);
   const [page, setPage] = useState(PAGINATION[0]);
 
-  const isOpenModal = useRecoilValue(modalState);
   const currentText = current ? 'USD' : 'KRW';
+
+  const handleChangeCurrent = () => {
+    setCurrent((prev) => !prev);
+  };
+
+  const handleClickPage = (item: any) => {
+    setPage(item);
+  };
 
   const getApiData = async () => {
     if (current) {
@@ -42,14 +48,6 @@ const Market = () => {
   useEffect(() => {
     getApiData();
   }, [page, current]);
-
-  const handleChangeCurrent = () => {
-    setCurrent((prev) => !prev);
-  };
-
-  const handleClickPage = (item: any) => {
-    setPage(item);
-  };
 
   return (
     <div className={styles.container}>

@@ -17,96 +17,95 @@
 
   .modalContainer {
     width: 360px;
+    padding: 40px 30px 10px;
     background-color: #202530;
     border-radius: 6px;
 
-    .modalContents {
-      padding: 40px 30px 10px;
+    h3 {
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: colors.$SUB_TEXT_COLOR;
+    }
 
-      h3 {
-        margin-bottom: 12px;
-        font-size: 14px;
-        color: colors.$SUB_TEXT_COLOR;
-      }
-
-      .radioWrap {
-        width: 80%;
-        margin-bottom: 40px;
-        @include flexbox.flexbox(between, center);
-
-        input {
-          display: none;
-        }
-      }
-
-      .dateWrap {
+    > div {
+      &:not(:last-of-type) {
         margin-bottom: 40px;
       }
+    }
 
-      .searchWrap {
-        position: relative;
-        margin-bottom: 40px;
+    .radioWrap {
+      width: 80%;
+      @include flexbox.flexbox(between, center);
 
-        > input {
-          padding: 0 0 10px;
-          border-bottom: 1px solid colors.$SUB_COLOR;
-        }
-
-        ul {
-          position: absolute;
-          z-index: 9;
-          width: 100%;
-          height: 200px;
-          overflow: auto;
-          background-color: #202530;
-
-          li {
-            button {
-              width: 100%;
-              padding: 5px;
-              color: colors.$WHITE;
-              text-align: left;
-            }
-          }
-        }
+      input {
+        display: none;
       }
+    }
 
-      .transactionWrap {
-        margin-bottom: 40px;
-        @include flexbox.flexbox(between, center);
+    .searchWrap {
+      position: relative;
 
-        button {
-          width: 47%;
-          padding: 10px;
-          color: colors.$WHITE;
-          background-color: #6f7888;
-          border-radius: 6px;
-
-          &.active {
-            background-color: colors.$MINUS;
-          }
-        }
-      }
-
-      .inputWrap {
-        @include flexbox.flexbox(center, center);
+      > input {
         padding: 0 0 10px;
-        margin-bottom: 40px;
         border-bottom: 1px solid colors.$SUB_COLOR;
-
-        input {
-          margin-left: 20px;
-        }
       }
 
-      .quantityWrap {
-        margin-bottom: 40px;
+      ul {
+        position: absolute;
+        z-index: 9;
+        width: 100%;
+        height: 200px;
+        overflow: auto;
+        background-color: #202530;
 
-        input {
-          padding: 0 0 10px;
-          border-bottom: 1px solid colors.$SUB_COLOR;
+        li {
+          button {
+            width: 100%;
+            padding: 5px;
+            color: colors.$WHITE;
+            text-align: left;
+          }
         }
       }
+    }
+
+    .transactionWrap {
+      @include flexbox.flexbox(between, center);
+
+      button {
+        width: 47%;
+        padding: 10px;
+        color: colors.$WHITE;
+        background-color: #6f7888;
+        border-radius: 6px;
+
+        &.active {
+          background-color: colors.$MINUS;
+        }
+      }
+    }
+
+    .inputWrap {
+      @include flexbox.flexbox(center, center);
+      padding: 0 0 10px;
+      border-bottom: 1px solid colors.$SUB_COLOR;
+
+      input {
+        margin-left: 20px;
+      }
+    }
+
+    .quantityWrap {
+      input {
+        padding: 0 0 10px;
+        border-bottom: 1px solid colors.$SUB_COLOR;
+      }
+    }
+
+    .errorMsg {
+      font-size: 14px;
+      color: colors.$MINUS;
+      text-align: center;
     }
 
     .buttonWrap {

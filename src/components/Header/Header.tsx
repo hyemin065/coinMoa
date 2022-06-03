@@ -7,9 +7,11 @@ import { isLoginState } from '../../recoil/recoil';
 import { useEffect } from 'react';
 
 const Header = () => {
-  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
   const uniqueId = localStorage.getItem('id');
   const userLoginId = localStorage.getItem('userId');
+
+  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
+
   const navigate = useNavigate();
 
   const handleLogout = () => {

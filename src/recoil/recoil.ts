@@ -1,4 +1,4 @@
-// import { IUserCoinUpdate } from '../types/coin';
+import { IUserCoinList } from '../types/coin';
 import { atom } from 'recoil';
 
 export const modalState = atom<boolean>({
@@ -21,7 +21,7 @@ export const dateState = atom<string>({
   default: '',
 });
 
-// export const coinUpdateState = atom<IUserCoinUpdate[]>({
-//   key: 'coinUpdateState',
-//   default: [],
-// });
+export const coinListState = atom<IUserCoinList[]>({
+  key: 'coinListState',
+  default: [],
+});

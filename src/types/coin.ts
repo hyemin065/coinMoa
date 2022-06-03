@@ -30,29 +30,19 @@ export interface IMarketCoin {
 }
 
 export interface IUserCoinList {
-  apiCallName: string;
-  market: string; // 거래소
-  name: string; // 코인이름
-  date: string; // 코인 매입 날짜
-  currency: string;
-  average: number;
-  transactionPrice: number; // 매수가 or 매도가
-  quantity: number; // 보유수량
-  totalAmount: number; // 매수금액
-  valuationAmount: number; // 평가금액
-}
-
-export interface IUserCoinUpdate {
   userId: string;
   apiCallName: string;
   market: string;
   name: string;
-  date: string;
-  average: string;
+  symbol: string;
+  thumb: string;
   currency: string;
-  transactionPrice: number;
   transaction: string;
+  date: string;
+  transactionPrice: number;
+  average: number;
   quantity: number;
+  totalAmount: number;
 }
 
 export interface ISearchCoin {

@@ -4,6 +4,7 @@
 
 .container {
   width: 1200px;
+  min-height: calc(100vh - 190px);
   margin: 0 auto;
   color: colors.$WHITE;
 
@@ -22,7 +23,7 @@
       &::before {
         @include position.absolute(0 auto auto 0);
         display: block;
-        width: 6px;
+        width: 8px;
         height: 100%;
         content: '';
         border-top-left-radius: 6px;
@@ -63,12 +64,14 @@
 
         h3 {
           margin-bottom: 10px;
-          font-size: 14px;
+          font-size: 12px;
+          color: #dfded8;
         }
 
         p {
           margin-bottom: 5px;
           font-size: 24px;
+          color: #dfded8;
         }
 
         dl {
@@ -77,6 +80,10 @@
 
           dt {
             color: colors.$SUB_TEXT_COLOR;
+          }
+
+          dd {
+            color: colors.$MINUS;
           }
         }
       }
@@ -90,9 +97,8 @@
       margin-bottom: 15px;
 
       button {
-        padding: 10px;
+        padding: 10px 12px;
         font-size: 14px;
-        color: colors.$WHITE;
         color: colors.$SUB_COLOR;
         background-color: colors.$MAIN_COLOR;
         border-radius: 6px;
@@ -110,11 +116,51 @@
 
         th,
         td {
-          padding: 15px;
+          &:first-child,
+          &:nth-child(2),
+          &:nth-child(3) {
+            text-align: left;
+          }
+          padding: 20px 10px;
           font-size: 14px;
+          text-align: right;
+          vertical-align: middle;
           border-bottom: 1px solid #2f2f2f;
+
+          img {
+            margin-right: 10px;
+            vertical-align: middle;
+          }
+
+          &.plus {
+            color: colors.$PLUS;
+          }
+
+          &.minus {
+            color: colors.$MINUS;
+          }
         }
       }
     }
+
+    .addBtnWrap {
+      width: 100%;
+      height: calc(100vh - 360px);
+      @include flexbox.flexbox(center, center);
+
+      button {
+        padding: 10px 12px;
+        font-size: 14px;
+        color: colors.$SUB_COLOR;
+        background-color: colors.$MAIN_COLOR;
+        border-radius: 6px;
+      }
+    }
+  }
+
+  .goLogin {
+    width: 100%;
+    height: calc(100vh - 190px);
+    @include flexbox.flexbox(center, center);
   }
 }

@@ -1,18 +1,22 @@
-import dayjs from 'dayjs';
 import { useEffect, useRef, useState } from 'react';
-import Calendar from 'react-calendar';
 import { useSetRecoilState } from 'recoil';
 import { dateState } from '../../recoil/recoil';
-import './Calendar.css';
+import Calendar from 'react-calendar';
+import dayjs from 'dayjs';
+
 import styles from './dateCalendar.module.scss';
+import './Calendar.css';
 
 const DateCalendar = () => {
   const [value, setValue] = useState(new Date());
   const [isShowCalendar, setIsShowCalendar] = useState(false);
+
   const setDate = useSetRecoilState(dateState);
+
   const SelectDate = dayjs(value).format('YYYY-MM-DD');
 
   const modalRef = useRef<HTMLDivElement>(null);
+
   const handleShowCalendar = () => {
     setIsShowCalendar((prev) => !prev);
   };

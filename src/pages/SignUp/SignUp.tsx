@@ -1,17 +1,19 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+
 import SignInput from '../../components/SignInput/SignInput';
+
 import styles from './signUp.module.scss';
 
 const SignUp = () => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [idDuplicateCheck, setIdDuplicateCheck] = useState(false);
   const [idCheckMsg, setIdCheckMsg] = useState('');
   const [passwordErrorMsg, setPasswordErrorMsg] = useState('');
   const [passwordConfirmErrorMsg, setPasswordConfirmErrorMsg] = useState('');
+  const [idDuplicateCheck, setIdDuplicateCheck] = useState(false);
   const [signUpSuccess, setSignUpSuccess] = useState(false);
 
   const isIdColor = idCheckMsg.includes('사용가능') ? `${styles.success}` : `${styles.error}`;
