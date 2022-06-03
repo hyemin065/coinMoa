@@ -47,6 +47,7 @@ const Market = () => {
 
   useEffect(() => {
     getApiData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, current]);
 
   return (

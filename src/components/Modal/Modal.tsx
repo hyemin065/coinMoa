@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { coinListState, dateState, modalState } from '../../recoil/recoil';
 import axios from 'axios';
 
@@ -124,7 +124,7 @@ const Modal = () => {
     });
     if (aa.length > 0) {
       try {
-        const res = await axios.post('https://coin-moa.herokuapp.com/coin/update', {
+        await axios.post('https://coin-moa.herokuapp.com/coin/update', {
           userId: uniqueId,
           apiCallName: searchValueId,
           market: marketValue,
@@ -143,29 +143,28 @@ const Modal = () => {
               ? aa[0].totalAmount + Number(transactionPrice) * Number(quantity)
               : aa[0].totalAmount - Number(transactionPrice) * Number(quantity),
         });
-        const { coin } = res.data;
         window.location.reload();
 
         setIsOpenModal(false);
       } catch (error) {
-        console.log(error);
+        throw new Error((error as Error).message);
       }
 
       if (transaction === 'sell' && aa[0].quantity - quantity <= 0) {
         try {
-          const res = await axios.post('https://coin-moa.herokuapp.com/coin/delete', {
+          await axios.post('https://coin-moa.herokuapp.com/coin/delete', {
             userId: uniqueId,
             apiCallName: searchValueId,
             market: marketValue,
           });
           window.location.reload();
         } catch (error) {
-          console.log(error);
+          throw new Error((error as Error).message);
         }
       }
     } else {
       try {
-        const res = await axios.post('https://coin-moa.herokuapp.com/coin/coinAdd', {
+        await axios.post('https://coin-moa.herokuapp.com/coin/coinAdd', {
           userId: uniqueId,
           apiCallName: searchValueId,
           market: marketValue,
@@ -183,25 +182,9 @@ const Modal = () => {
         setIsOpenModal(false);
         window.location.reload();
       } catch (error) {
-        console.log(error);
+        throw new Error((error as Error).message);
       }
     }
-
-    console.log(
-      uniqueId,
-      searchValueId,
-      marketValue,
-      searchValueName,
-      searchValueSymbol,
-      searchValueThumb,
-      currency,
-      transaction,
-      date,
-      transactionPrice,
-      Number(transactionPrice),
-      quantity + quantity,
-      Number(transactionPrice) * quantity
-    );
   };
 
   return ReactDOM.createPortal(

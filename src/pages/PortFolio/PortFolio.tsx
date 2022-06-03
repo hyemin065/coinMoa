@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { coinListState, isLoginState, modalState } from '../../recoil/recoil';
 import axios from 'axios';
@@ -67,6 +67,7 @@ const PortFolio = () => {
 
   useEffect(() => {
     getPortFolio();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

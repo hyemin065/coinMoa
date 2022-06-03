@@ -6,8 +6,6 @@ import PortFolio from '../pages/PortFolio/PortFolio';
 import SignIn from '../pages/SignIn/SignIn';
 import SignUp from '../pages/SignUp/SignUp';
 
-import styles from './routes.module.scss';
-
 const RootRoute = () => {
   return (
     <>

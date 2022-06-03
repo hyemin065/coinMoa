@@ -24,6 +24,7 @@ const DateCalendar = () => {
   useEffect(() => {
     setIsShowCalendar(false);
     setDate(SelectDate);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   useEffect(() => {

@@ -18,7 +18,7 @@
   .modalContainer {
     width: 360px;
     padding: 40px 30px 10px;
-    background-color: #202530;
+    background-color: colors.$BG_COLOR;
     border-radius: 6px;
 
     h3 {
@@ -56,7 +56,7 @@
         width: 100%;
         height: 200px;
         overflow: auto;
-        background-color: #202530;
+        background-color: colors.$BG_COLOR;
 
         li {
           button {
@@ -76,7 +76,7 @@
         width: 47%;
         padding: 10px;
         color: colors.$WHITE;
-        background-color: #6f7888;
+        background-color: colors.$MODAL_GRAY_COLOR;
         border-radius: 6px;
 
         &.active {
@@ -116,12 +116,12 @@
         padding: 12px 20px;
         font-weight: 500;
         font-weight: 600;
-        color: #202530;
+        color: colors.$BG_COLOR;
         background-color: colors.$MAIN_COLOR;
         border-radius: 6px;
 
         &:last-child {
-          color: #6f7888;
+          color: colors.$MODAL_GRAY_COLOR;
           background-color: transparent;
         }
       }
@@ -150,7 +150,7 @@
     position: absolute;
     top: 24px;
     z-index: 9;
-    background-color: #202530;
+    background-color: colors.$BG_COLOR;
 
     li {
       button {
