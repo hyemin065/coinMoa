@@ -32,8 +32,6 @@
     }
 
     .nav {
-      width: calc(100% - 430px);
-
       a,
       button {
         padding: 0 10px;
@@ -44,7 +42,8 @@
     }
 
     .sign {
-      @include flexbox.flexbox(center, center);
+      @include flexbox.flexbox(end, center);
+      width: calc(100% - 390px);
 
       p {
         font-size: 14px;

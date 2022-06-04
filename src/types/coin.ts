@@ -30,6 +30,7 @@ export interface IMarketCoin {
 }
 
 export interface IUserCoinList {
+  id: string;
   userId: string;
   apiCallName: string;
   market: string;
@@ -39,10 +40,14 @@ export interface IUserCoinList {
   currency: string;
   transaction: string;
   date: string;
+  price: IPrice;
   transactionPrice: number;
   average: number;
   quantity: number;
   totalAmount: number;
+  evaluationAmount: number;
+  valuationPL: number;
+  return: number;
 }
 
 export interface ISearchCoin {
@@ -52,4 +57,9 @@ export interface ISearchCoin {
   name: string;
   symbol: string;
   thumb: string;
+}
+
+export interface IPrice {
+  krw: number;
+  usd: number;
 }

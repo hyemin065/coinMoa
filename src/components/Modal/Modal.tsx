@@ -9,11 +9,16 @@ import { ISearchCoin, IUserCoinList } from '../../types/coin';
 import DateCalendar from '../DatePicker/DateCalendar';
 import Radio from '../Radio/Radio';
 
-import { ArrowIcon } from '../../assets';
 import styles from './modal.module.scss';
 
-const CURRENCY_CATEGORY = ['usd', 'krw'];
 const TRANSACTION_CATEGORY = ['buy', 'sell'];
+
+interface ISearchValue {
+  id: string;
+  name: string;
+  symbol: string;
+  thumb: string;
+}
 
 const Modal = () => {
   const uniqueId = localStorage.getItem('id');
@@ -27,23 +32,19 @@ const Modal = () => {
   const [searchValueThumb, setSearchValueThumb] = useState('');
   const [searchResult, setSearchResult] = useState<ISearchCoin[]>([]);
   const [transaction, setTransaction] = useState('buy');
-  const [currency, setCurrency] = useState('usd');
   const [transactionPrice, setTransactionPrice] = useState(0);
   const [quantity, setQuantity] = useState(1);
 
   const date = useRecoilValue(dateState);
 
   const [isOpenModal, setIsOpenModal] = useRecoilState(modalState);
-  const [isShowDropdown, setIsShowDropdown] = useState(false);
   const [isShowSearchResult, setIsShowSearchResult] = useState(false);
 
   const modalRef = useRef<HTMLDivElement>(null);
 
-  const selectCurrency = CURRENCY_CATEGORY.filter((item) => {
-    return item !== currency;
-  });
+  const selectCurrency = marketValue === 'binance' ? 'usd' : 'krw';
 
-  const handleSearchInputChange = async (e: any) => {
+  const handleSearchInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
     setSearchValueId(value);
     if (value !== '') {
@@ -61,11 +62,11 @@ const Modal = () => {
     }
   };
 
-  const handleChangeChecked = (e: any) => {
+  const handleChangeChecked = (e: ChangeEvent<HTMLInputElement>) => {
     setMarketValue(e.currentTarget.value);
   };
 
-  const handleChangeSearchInput = (item: any) => {
+  const handleChangeSearchInput = (item: ISearchValue) => {
     setSearchValueId(item.id);
     setSearchValueName(item.name);
     setSearchValueSymbol(item.symbol);
@@ -73,30 +74,19 @@ const Modal = () => {
     setIsShowSearchResult(false);
   };
 
-  const handleChangeTransaction = (item: any) => {
+  const handleChangeTransaction = (item: string) => {
     setTransaction(item);
-  };
-
-  const handleChangeCurrency = (e: any) => {
-    const { value } = e.currentTarget;
-    setCurrency(value);
-    setIsShowDropdown(false);
   };
 
   const handleChangePrice = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
     setTransactionPrice(Number(value));
-
     // setTransactionPrice(removedCommaValue.toLocaleString());
   };
 
-  const handleChangeQuantity = (e: any) => {
+  const handleChangeQuantity = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
-    setQuantity(value);
-  };
-
-  const handleClickDropdown = () => {
-    setIsShowDropdown((prev) => !prev);
+    setQuantity(Number(value));
   };
 
   const handleCloseModal = () => {
@@ -131,7 +121,7 @@ const Modal = () => {
           name: searchValueName,
           symbol: searchValueSymbol,
           thumb: searchValueThumb,
-          currency,
+          currency: selectCurrency,
           transaction,
           date,
           transactionPrice,
@@ -171,7 +161,7 @@ const Modal = () => {
           name: searchValueName,
           symbol: searchValueSymbol,
           thumb: searchValueThumb,
-          currency,
+          currency: selectCurrency,
           transaction,
           date,
           transactionPrice,
@@ -243,21 +233,7 @@ const Modal = () => {
 
         <h3>거래가격</h3>
         <div className={styles.inputWrap}>
-          <div className={styles.dropdown}>
-            <button type='button' onClick={handleClickDropdown}>
-              {currency}
-              <ArrowIcon />
-            </button>
-            {isShowDropdown && (
-              <ul>
-                <li>
-                  <button type='button' onClick={handleChangeCurrency} value={selectCurrency}>
-                    {selectCurrency}
-                  </button>
-                </li>
-              </ul>
-            )}
-          </div>
+          <span>{selectCurrency}</span>
           <input
             type='text'
             placeholder='매수가를 입력해주세요'

@@ -8,7 +8,7 @@
   background-color: rgba(0, 0, 0, 70%);
   transform: translate(-50%, -50%);
   @include flexbox.flexbox(center, center);
-  @include position.absolute(50% auto auto 50%);
+  @include position.fixed(50% auto auto 50%);
 
   input {
     width: 100%;
@@ -89,6 +89,11 @@
       @include flexbox.flexbox(center, center);
       padding: 0 0 10px;
       border-bottom: 1px solid colors.$SUB_COLOR;
+
+      span {
+        font-size: 16px;
+        color: colors.$WHITE;
+      }
 
       input {
         margin-left: 20px;

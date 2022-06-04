@@ -8,8 +8,9 @@ import { IUserCoinList } from '../../types/coin';
 import Modal from '../../components/Modal/Modal';
 
 import styles from './portFolio.module.scss';
+import PortFolioItem from './PortFolioItem/PortFolioItem';
 
-const MARKET_CATE = ['all', 'binance', 'upbit', 'bithumb'];
+const MARKET_CATE = ['binance', 'upbit', 'bithumb'];
 
 const PortFolio = () => {
   const uniqueId = localStorage.getItem('id');
@@ -17,18 +18,38 @@ const PortFolio = () => {
   const [marketList, setMarketCoinList] = useState<IUserCoinList[]>([]);
   const [isOpenModal, setIsOpenModal] = useRecoilState(modalState);
   const [marketValue, setMarketValue] = useState(false);
+  const [isCurrencyAssets, setIsCurrencyAssets] = useState(false);
 
   const isLogin = useRecoilValue(isLoginState);
 
   const list = marketValue ? marketList : userCoinList;
 
+  const krwValuationPL = userCoinList.filter((item: IUserCoinList) => {
+    return item.currency === 'krw';
+  });
+  const usdValuationPL = userCoinList.filter((item: IUserCoinList) => {
+    return item.currency === 'usd';
+  });
+
+  const totalAssetsKRW = krwValuationPL.reduce((acc: number, cur: IUserCoinList) => {
+    return acc + cur.valuationPL;
+  }, 0);
+
+  const totalAssetsUSD = usdValuationPL.reduce((acc: number, cur: IUserCoinList) => {
+    return acc + cur.valuationPL;
+  }, 0);
+
+  const handleChangeCurrent = () => {
+    setIsCurrencyAssets((prev) => !prev);
+  };
+
   const handleOpenModal = () => {
     setIsOpenModal(true);
   };
 
-  const handleShowMarketCoin = (value: any) => {
+  const handleShowMarketCoin = (value: string) => {
     const ml = userCoinList.filter((item) => {
-      return value === 'all' ? item : item.market === value;
+      return item.market === value;
     });
     setMarketValue(true);
     setMarketCoinList(ml);
@@ -38,24 +59,26 @@ const PortFolio = () => {
     try {
       const res = await axios.get(`https://coin-moa.herokuapp.com/coin/getCoin/${uniqueId}`);
       const { coin } = res.data;
-      const coinName = coin.map((item: any) => item.apiCallName).join(',');
+      const coinName = coin.map((item: IUserCoinList) => item.apiCallName).join(',');
 
       const coinPrice = await getCoinOnlyPrice({
         ids: coinName,
         vs_currencies: 'krw,usd',
       });
 
-      const coinList = coin.map((item: any) => {
+      const coinList = coin.map((item: IUserCoinList) => {
         const name = item.apiCallName;
         const price = coinPrice[name];
         const presentPrice = price[item.currency];
         return {
           ...item,
           price,
-          totalAmount: item.average * item.quantity,
-          evaluationAmount: presentPrice * item.quantity,
+          totalAmount:
+            item.currency === 'krw' ? `₩${item.average * item.quantity}` : `$${item.average * item.quantity}`,
+          evaluationAmount:
+            item.currency === 'krw' ? `₩${presentPrice * item.quantity}` : `$${presentPrice * item.quantity}`,
           valuationPL: presentPrice * item.quantity - item.average * item.quantity,
-          return: ((presentPrice - item.average) / item.average) * 100,
+          return: (((presentPrice - item.average) / item.average) * 100).toFixed(2),
         };
       });
 
@@ -75,11 +98,25 @@ const PortFolio = () => {
       {isLogin ? (
         <>
           <ul>
+            <li>
+              <button type='button' onClick={() => setMarketValue(false)}>
+                <h3>총자산</h3>
+                <p>{isCurrencyAssets ? `₩${totalAssetsKRW.toFixed(2)}` : `$${totalAssetsUSD}`}</p>
+              </button>
+              <div className={styles.toggle}>
+                <button
+                  className={isCurrencyAssets ? `${styles.currentUSD}` : ''}
+                  type='button'
+                  onClick={handleChangeCurrent}
+                  aria-label='toggle current'
+                />
+              </div>
+            </li>
             {MARKET_CATE.map((item) => {
               return (
                 <li key={Math.random() * 1000}>
                   <button type='button' onClick={() => handleShowMarketCoin(item)}>
-                    {item}
+                    <span className={styles.marketName}>{item}</span>
                   </button>
                 </li>
               );
@@ -111,38 +148,8 @@ const PortFolio = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {list.map((item: any) => {
-                      return (
-                        <tr key={Math.random() * 1000}>
-                          <td>{item.date}</td>
-                          <td>{item.market}</td>
-                          <td>
-                            <img src={item.thumb} alt={item.name} />
-                            {item.name}
-                          </td>
-                          <td>{item.symbol}</td>
-                          {/* 현재가 */}
-                          <td>{`${item.currency === 'krw' ? `₩${item.price.krw}` : `$${item.price.usd}`}`}</td>
-                          {/* 내평단 */}
-                          <td>{`${item.currency === 'krw' ? `₩${item.average}` : `$${item.average}`}`}</td>
-                          {/* 보유수량 */}
-                          <td>{item.quantity}</td>
-                          {/* 매수금액 */}
-                          <td>{`${item.currency === 'krw' ? `₩${item.totalAmount}` : `$${item.totalAmount}`}`}</td>
-                          {/* 평가금액 */}
-                          <td>{`${
-                            item.currency === 'krw' ? `₩${item.evaluationAmount}` : `$${item.evaluationAmount}`
-                          }`}</td>
-                          {/* 평가손익 */}
-                          <td className={item.valuationPL > 0 ? `${styles.plus}` : `${styles.minus}`}>
-                            {item.valuationPL > 0 ? `+${item.valuationPL.toFixed(2)}` : item.valuationPL.toFixed(2)}
-                          </td>
-                          {/* 수익률 */}
-                          <td className={item.return > 0 ? `${styles.plus}` : `${styles.minus}`}>
-                            {`${item.return.toFixed(2)}%`}
-                          </td>
-                        </tr>
-                      );
+                    {list.map((item: IUserCoinList) => {
+                      return <PortFolioItem key={item.symbol} item={item} />;
                     })}
                   </tbody>
                 </table>

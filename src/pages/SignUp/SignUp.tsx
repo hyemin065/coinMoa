@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import SignInput from '../../components/SignInput/SignInput';
@@ -18,20 +18,20 @@ const SignUp = () => {
 
   const isIdColor = idCheckMsg.includes('사용가능') ? `${styles.success}` : `${styles.error}`;
 
-  const handleChangeId = (e: any) => {
+  const handleChangeId = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
     setId(value);
     setIdCheckMsg('');
     setIdDuplicateCheck(false);
   };
 
-  const handleChangePassword = (e: any) => {
+  const handleChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
     setPassword(value);
     setPasswordErrorMsg('');
   };
 
-  const handleChangePasswordConfirm = (e: any) => {
+  const handleChangePasswordConfirm = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
     setPasswordConfirm(value);
 

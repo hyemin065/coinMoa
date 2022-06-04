@@ -1,9 +1,10 @@
+import { ChangeEvent } from 'react';
 import styles from './radio.module.scss';
 
 interface IProps {
   label: string;
   id: string;
-  onChange: any;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   checked: boolean;
 }
 const Radio = ({ label, id, onChange, checked }: IProps) => {

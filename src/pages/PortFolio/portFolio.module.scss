@@ -16,7 +16,7 @@
     li {
       position: relative;
       width: 280px;
-      height: 115px;
+      height: 85px;
       background-color: #1e1e1e;
       border-radius: 10px;
 
@@ -58,34 +58,64 @@
         display: block;
         width: 100%;
         height: 100%;
-        padding: 15px 20px;
+        padding: 18px 20px 12px;
         color: colors.$WHITE;
         text-align: left;
 
         h3 {
-          margin-bottom: 10px;
+          margin-bottom: 6px;
           font-size: 12px;
-          color: #dfded8;
+          color: colors.$WHITE;
         }
 
         p {
-          margin-bottom: 5px;
-          font-size: 24px;
-          color: #dfded8;
+          font-size: 22px;
         }
+      }
 
-        dl {
-          @include flexbox.flexbox(between, center);
-          font-size: 14px;
+      .toggle {
+        position: relative;
+        width: 36px;
+        height: 20px;
+        background: colors.$MAIN_COLOR;
+        border-radius: 20px;
 
-          dt {
-            color: colors.$SUB_TEXT_COLOR;
+        button {
+          width: 100%;
+          height: 100%;
+
+          &.currentUSD {
+            &::before {
+              left: 50%;
+              transition: 0.3s;
+            }
           }
 
-          dd {
-            color: colors.$MINUS;
+          &::before {
+            position: absolute;
+            top: 2px;
+            left: 5%;
+            display: block;
+            width: 16px;
+            height: 16px;
+            content: '';
+            background-color: #ffffff;
+            border: 1px solid #ffffff;
+            border-radius: 20px;
+            transition: 0.3s;
           }
         }
+      }
+
+      .toggle,
+      .marketName {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 14px;
+        color: colors.$SUB_TEXT_COLOR;
+        text-transform: uppercase;
+        letter-spacing: 1px;
       }
     }
   }
@@ -112,33 +142,6 @@
       tr {
         th {
           background: #181818;
-        }
-
-        th,
-        td {
-          &:first-child,
-          &:nth-child(2),
-          &:nth-child(3) {
-            text-align: left;
-          }
-          padding: 20px 10px;
-          font-size: 14px;
-          text-align: right;
-          vertical-align: middle;
-          border-bottom: 1px solid #2f2f2f;
-
-          img {
-            margin-right: 10px;
-            vertical-align: middle;
-          }
-
-          &.plus {
-            color: colors.$PLUS;
-          }
-
-          &.minus {
-            color: colors.$MINUS;
-          }
         }
       }
     }

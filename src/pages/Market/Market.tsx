@@ -10,45 +10,34 @@ const PAGINATION = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const Market = () => {
   const [coinList, setCoinList] = useState<IMarketCoin[]>([]);
-  const [current, setCurrent] = useState(false);
+  const [iscurrency, setIsCurrent] = useState(false);
   const [page, setPage] = useState(PAGINATION[0]);
 
-  const currentText = current ? 'USD' : 'KRW';
+  const currentText = iscurrency ? 'USD' : 'KRW';
 
   const handleChangeCurrent = () => {
-    setCurrent((prev) => !prev);
+    setIsCurrent((prev) => !prev);
   };
 
-  const handleClickPage = (item: any) => {
+  const handleClickPage = (item: number) => {
     setPage(item);
   };
 
   const getApiData = async () => {
-    if (current) {
-      const res = await getCoinMarketApi({
-        order: 'market_cap_des',
-        per_page: 100,
-        page,
-        sparkline: false,
-        vs_currency: 'usd',
-      });
-      setCoinList(res);
-    } else {
-      const res = await getCoinMarketApi({
-        order: 'market_cap_des',
-        per_page: 100,
-        page,
-        sparkline: false,
-        vs_currency: 'krw',
-      });
-      setCoinList(res);
-    }
+    const res = await getCoinMarketApi({
+      order: 'market_cap_des',
+      per_page: 100,
+      page,
+      sparkline: false,
+      vs_currency: iscurrency ? 'usd' : 'krw',
+    });
+    setCoinList(res);
   };
 
   useEffect(() => {
     getApiData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, current]);
+  }, [page, iscurrency]);
 
   return (
     <div className={styles.container}>
@@ -69,7 +58,7 @@ const Market = () => {
           <button
             type='button'
             onClick={handleChangeCurrent}
-            className={current ? `${styles.currentUSD}` : ''}
+            className={iscurrency ? `${styles.currentUSD}` : ''}
             aria-label='toggle current'
           />
         </div>
@@ -102,7 +91,7 @@ const Market = () => {
         <tbody>
           {coinList &&
             coinList.map((item) => {
-              return <MarketItem key={item.id} item={item} current={current} />;
+              return <MarketItem key={item.id} item={item} currency={iscurrency} />;
             })}
         </tbody>
       </table>

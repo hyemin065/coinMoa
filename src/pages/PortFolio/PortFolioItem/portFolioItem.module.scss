@@ -1,0 +1,39 @@
+@use '/src/styles/constants/colors';
+
+table {
+  tr {
+    th,
+    td {
+      &:first-child,
+      &:nth-child(2),
+      &:nth-child(3) {
+        text-align: left;
+      }
+      padding: 20px 10px;
+      font-size: 14px;
+      text-align: right;
+      vertical-align: middle;
+      border-bottom: 1px solid #2f2f2f;
+
+      .imgBox {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+        vertical-align: middle;
+      }
+
+      img {
+        width: 100%;
+      }
+
+      &.plus {
+        color: colors.$PLUS;
+      }
+
+      &.minus {
+        color: colors.$MINUS;
+      }
+    }
+  }
+}

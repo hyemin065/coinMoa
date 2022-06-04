@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { isLoginState } from '../../recoil/recoil';
@@ -19,14 +19,14 @@ const SignIn = () => {
 
   const navigate = useNavigate();
 
-  const handleChangeId = (e: any) => {
+  const handleChangeId = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
     setId(value);
     setloginFail('');
     setIdErrorMsg('');
   };
 
-  const handleChangePassword = (e: any) => {
+  const handleChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
     setPassword(value);
     setloginFail('');
@@ -58,9 +58,9 @@ const SignIn = () => {
           localStorage.setItem('id', uniqueId);
           isSetLogin(true);
         }
-      } catch (error: any) {
+      } catch (error) {
         setloginFail('로그인 실패');
-        throw new Error(error.response.data.message);
+        throw new Error((error as Error).message);
       }
     }
   };

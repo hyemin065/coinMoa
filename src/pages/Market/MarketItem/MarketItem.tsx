@@ -5,14 +5,14 @@ import styles from './marketItem.module.scss';
 
 interface IProps {
   item: IMarketCoin;
-  current: boolean;
+  currency: boolean;
 }
-const MarketItem = ({ current, item }: IProps) => {
-  const currentPrice = useUnitCommaData(current, item.current_price !== null ? item.current_price : 0);
-  const highPrice = useUnitCommaData(current, item.high_24h !== null ? item.high_24h : 0);
-  const lowPrice = useUnitCommaData(current, item.low_24h !== null ? item.low_24h : 0);
-  const totalVolume = useUnitCommaData(current, item.total_volume !== null ? item.total_volume : 0);
-  const marketCap = useUnitCommaData(current, item.market_cap !== null ? item.market_cap : 0);
+const MarketItem = ({ currency, item }: IProps) => {
+  const currentPrice = useUnitCommaData(currency, item.current_price !== null ? item.current_price : 0);
+  const highPrice = useUnitCommaData(currency, item.high_24h !== null ? item.high_24h : 0);
+  const lowPrice = useUnitCommaData(currency, item.low_24h !== null ? item.low_24h : 0);
+  const totalVolume = useUnitCommaData(currency, item.total_volume !== null ? item.total_volume : 0);
+  const marketCap = useUnitCommaData(currency, item.market_cap !== null ? item.market_cap : 0);
 
   return (
     <tr>
