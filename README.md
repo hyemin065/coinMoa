@@ -1,6 +1,7 @@
 ## 개인 과제
 ### 내가 가진 코인들의 현재가격과 수익률을 한번에 보여주는 사이트
-개발기간 : 22/06/01 ~ 22/06/05
+개발기간 : 22/06/01 ~ 22/06/05  
+배포 URL : https://kaleidoscopic-crisp-080632.netlify.app/portFolio
 
 <br>
 
@@ -35,7 +36,7 @@ src
   ```
   <br>
 
-### 기술스택
+### Front-End 기술스택
 - React
 
 - TypeScript
@@ -43,6 +44,14 @@ src
 - SCSS
 
 <br>
+
+### Back-End
+- Express
+
+- Mongoose
+
+<br>
+
 
 ### 라이브러리 
 - dayjs
@@ -52,3 +61,15 @@ src
 - recoil
 
 - axios
+
+
+<br>
+
+### 기능
+- 암호화폐
+현재 암호화폐 시세를 보여줍니다.
+오른쪽 토글 버튼을 눌러서 USD와 KRW의 시세를 확인 할 수 있습니다.
+
+- 포트폴리오
+modal을 사용하여 현재 갖고있는 코인을 추가하면
+현재 시세와 비교해서 수익률과 손익을 보여줍니다
