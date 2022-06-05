@@ -1,7 +1,7 @@
 ## 개인 과제
 ### 내가 가진 코인들의 현재가격과 수익률을 한번에 보여주는 사이트
 개발기간 : 22/06/01 ~ 22/06/05  
-배포 URL : https://kaleidoscopic-crisp-080632.netlify.app/portFolio
+배포 URL : https://kaleidoscopic-crisp-080632.netlify.app/
 
 <br>
 
