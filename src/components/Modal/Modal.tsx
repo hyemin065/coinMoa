@@ -23,8 +23,6 @@ interface ISearchValue {
 const Modal = () => {
   const uniqueId = localStorage.getItem('id');
 
-  const userCoinList = useRecoilValue<IUserCoinList[]>(coinListState);
-
   const [marketValue, setMarketValue] = useState('upbit');
   const [searchValueId, setSearchValueId] = useState('');
   const [searchValueName, setSearchValueName] = useState('');
@@ -34,12 +32,11 @@ const Modal = () => {
   const [transaction, setTransaction] = useState('buy');
   const [transactionPrice, setTransactionPrice] = useState(0);
   const [quantity, setQuantity] = useState(1);
-
-  const date = useRecoilValue(dateState);
-
   const [isOpenModal, setIsOpenModal] = useRecoilState(modalState);
   const [isShowSearchResult, setIsShowSearchResult] = useState(false);
 
+  const userCoinList = useRecoilValue<IUserCoinList[]>(coinListState);
+  const date = useRecoilValue(dateState);
   const modalRef = useRef<HTMLDivElement>(null);
 
   const selectCurrency = marketValue === 'binance' ? 'usd' : 'krw';
