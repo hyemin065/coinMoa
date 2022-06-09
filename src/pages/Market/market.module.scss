@@ -29,10 +29,10 @@
 
     .toggle {
       position: relative;
-      width: 36px;
-      height: 20px;
-      background: colors.$MAIN_COLOR;
-      border-radius: 20px;
+      width: 55px;
+      height: 25px;
+      background: #a9a9a9;
+      border-radius: 6px;
 
       button {
         width: 100%;
@@ -49,13 +49,23 @@
           top: 2px;
           left: 5%;
           display: block;
-          width: 16px;
-          height: 16px;
+          width: 25px;
+          height: 21px;
           content: '';
           background-color: #ffffff;
           border: 1px solid #ffffff;
-          border-radius: 20px;
+          border-radius: 6px;
           transition: 0.3s;
+        }
+
+        span {
+          position: absolute;
+          top: 5px;
+          left: 9px;
+
+          &:last-child {
+            left: 37px;
+          }
         }
       }
     }

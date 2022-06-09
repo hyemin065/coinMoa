@@ -60,7 +60,10 @@ const Market = () => {
             onClick={handleChangeCurrent}
             className={iscurrency ? `${styles.currentUSD}` : ''}
             aria-label='toggle current'
-          />
+          >
+            <span>₩</span>
+            <span>$</span>
+          </button>
         </div>
       </div>
 
