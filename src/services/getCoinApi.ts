@@ -1,9 +1,14 @@
-import { IExchangeParams, ICoinMarketParams, ICoinSearchListParams, ICoinOnlyPriceParams } from '../types/coin';
+import {
+  IUserCoinList,
+  IExchangeParams,
+  ICoinMarketParams,
+  ICoinSearchListParams,
+  ICoinOnlyPriceParams,
+} from '../types/coin';
 
 import axios from 'axios';
 
 const COINGECKO_BASE_URL = 'https://api.coingecko.com/api/v3';
-const COINMARKETCAP_BASE_URL = 'https://pro-api.coinmarketcap.com';
 
 export const getCoinMarketApi = async (params: ICoinMarketParams) => {
   try {
@@ -79,8 +84,42 @@ export const getDominanceApi = async () => {
         'Content-Type': 'application/json',
       },
     });
-    console.log(res);
-    return res.data;
+    return res.data.data;
+  } catch (error) {
+    throw new Error((error as Error).message);
+  }
+};
+
+export const getPortFolioApi = async () => {
+  const uniqueId = localStorage.getItem('id');
+
+  try {
+    const res = await axios.get(`https://coin-moa.herokuapp.com/coin/getCoin/${uniqueId}`);
+    const { coin } = res.data;
+    const coinName = coin.map((item: IUserCoinList) => item.apiCallName).join(',');
+
+    const coinPrice = await getCoinOnlyPrice({
+      ids: coinName,
+      vs_currencies: 'krw,usd',
+    });
+
+    const coinList = coin.map((item: IUserCoinList) => {
+      const name = item.apiCallName;
+      const price = coinPrice[name];
+      const presentPrice = price[item.currency];
+
+      return {
+        ...item,
+        price,
+        totalAmount: item.currency === 'krw' ? `₩${item.average * item.quantity}` : `$${item.average * item.quantity}`,
+        evaluationAmount:
+          item.currency === 'krw' ? `₩${presentPrice * item.quantity}` : `$${presentPrice * item.quantity}`,
+        valuationPL: presentPrice * item.quantity - item.average * item.quantity,
+        return: (((presentPrice - item.average) / item.average) * 100).toFixed(2),
+      };
+    });
+
+    return coinList;
   } catch (error) {
     throw new Error((error as Error).message);
   }

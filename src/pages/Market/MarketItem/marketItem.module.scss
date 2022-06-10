@@ -5,6 +5,16 @@ table {
     td {
       font-size: 14px;
 
+      &.bookmark {
+        button {
+          width: 18px;
+
+          svg {
+            fill: colors.$WHITE;
+          }
+        }
+      }
+
       &.symbol {
         text-transform: uppercase;
       }

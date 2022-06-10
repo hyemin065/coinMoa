@@ -9,6 +9,7 @@ import PortFolioItem from './PortFolioItem/PortFolioItem';
 import Modal from '../../components/Modal/Modal';
 
 import styles from './portFolio.module.scss';
+import { Link } from 'react-router-dom';
 
 const MARKET_CATE = ['binance', 'upbit', 'bithumb'];
 
@@ -149,7 +150,7 @@ const PortFolio = () => {
                   </thead>
                   <tbody>
                     {list.map((item: IUserCoinList) => {
-                      return <PortFolioItem key={item.symbol} item={item} />;
+                      return <PortFolioItem key={`${item.market}_${item.symbol}`} item={item} />;
                     })}
                   </tbody>
                 </table>
@@ -165,7 +166,10 @@ const PortFolio = () => {
           </div>
         </>
       ) : (
-        <div className={styles.goLogin}>로그인해주세요</div>
+        <div className={styles.goLogin}>
+          <p>로그인 후 이용하실 수 있습니다</p>
+          <Link to='/signin'>로그인</Link>
+        </div>
       )}
     </div>
   );

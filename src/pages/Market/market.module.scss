@@ -81,33 +81,37 @@
       th {
         background: #181818;
 
-        &:nth-child(3) {
+        &:first-child {
+          padding: 0 28px 0 5px;
+        }
+
+        &:nth-child(2) {
+          padding: 0 16px;
+        }
+
+        &:nth-child(3),
+        &:nth-child(4) {
           text-align: right;
         }
       }
 
       td {
         &:nth-child(2) {
-          color: colors.$WHITE;
+          padding: 0;
         }
       }
 
       th,
       td {
         &:first-child {
-          padding: 0 15px 0 5px;
-          text-align: center;
+          text-align: right;
         }
 
-        &:nth-child(2) {
-          padding: 0;
-        }
-
-        &:nth-child(4),
         &:nth-child(5),
         &:nth-child(6),
         &:nth-child(7),
         &:nth-child(8),
+        &:nth-child(9),
         &:last-child {
           text-align: right;
         }
@@ -144,10 +148,27 @@
   > div {
     position: relative;
     width: 49%;
-    height: 170px;
+    height: 160px;
     padding: 15px 25px;
     background-color: #1e1e1e;
     border-radius: 6px;
+
+    &:last-child {
+      &::before {
+        background-color: colors.$MINUS;
+      }
+    }
+
+    &::before {
+      @include position.absolute(0 auto auto 0);
+      display: block;
+      width: 8px;
+      height: 100%;
+      content: '';
+      background-color: colors.$PLUS;
+      border-top-left-radius: 6px;
+      border-bottom-left-radius: 6px;
+    }
 
     .trendTitle,
     .dominanceTitle {
@@ -161,27 +182,18 @@
 
       img,
       svg {
-        width: 28px;
+        width: 24px;
       }
     }
+  }
 
+  .trendWrap {
     ul {
       margin-left: 10px;
 
       li {
         @include flexbox.flexbox(start, center);
         margin-bottom: 10px;
-
-        &::before {
-          @include position.absolute(0 auto auto 0);
-          display: block;
-          width: 8px;
-          height: 100%;
-          content: '';
-          background-color: colors.$PLUS;
-          border-top-left-radius: 6px;
-          border-bottom-left-radius: 6px;
-        }
 
         span {
           margin-right: 15px;
@@ -216,6 +228,19 @@
             font-size: 14px;
             color: #a9a9a9;
           }
+        }
+      }
+    }
+  }
+
+  .dominanceWrap {
+    ul {
+      li {
+        dl {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 120px;
         }
       }
     }

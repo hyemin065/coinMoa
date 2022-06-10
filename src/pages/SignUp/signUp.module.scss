@@ -77,10 +77,11 @@
   }
 
   .signBtn {
+    @include flexbox.flexbox(center, center);
     width: 120px;
     height: 40px;
-    padding: 7px 10px;
     margin: 40px auto 0;
+    font-size: 14px;
     font-weight: 600;
     color: colors.$SUB_COLOR;
     background-color: colors.$WHITE;

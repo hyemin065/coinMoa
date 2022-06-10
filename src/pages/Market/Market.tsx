@@ -1,21 +1,40 @@
 import { useEffect, useState } from 'react';
 
-import { getCoinMarketApi, getDominanceApi, getTrendingCoin } from '../../services/getCoinApi';
-import { IDominance, IMarketCoin, ITrendCoinArray } from '../../types/coin';
+import { getCoinMarketApi, getDominanceApi, getPortFolioApi, getTrendingCoin } from '../../services/getCoinApi';
+import { IDominance, IMarketCoin, ITrendCoinArray, IUserCoinList } from '../../types/coin';
 import MarketItem from './MarketItem/MarketItem';
 
 import styles from './market.module.scss';
 import ScrollTopButton from '../../components/ScrollTopButton/ScrollTopButton';
 import TrendingIcon from '../../assets/trendingIcon.png';
 import { DominanceIcon } from '../../assets';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { coinListState, modalState } from '../../recoil/recoil';
+import Modal from '../../components/Modal/Modal';
 
 const PAGINATION = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const Market = () => {
+  const [isOpenModal, setIsOpenModal] = useRecoilState(modalState);
+  const setBookMarkCoin = useSetRecoilState<IUserCoinList[]>(coinListState);
+
   const [coinList, setCoinList] = useState<IMarketCoin[]>([]);
   const [iscurrency, setIsCurrent] = useState(false);
   const [trendCoin, setTrendCoin] = useState<ITrendCoinArray[]>([]);
-  const [dominance, setDominance] = useState<IDominance[]>([]);
+  const [dominance, setDominance] = useState<IDominance>({
+    eth_dominance: 0,
+    btc_dominance: 0,
+    eth_dominance_24h_percentage_change: 0,
+    btc_dominance_24h_percentage_change: 0,
+    defi_volume_24h: 0,
+    defi_market_cap: 0,
+    defi_24h_percentage_change: 0,
+    stablecoin_volume_24h: 0,
+    stablecoin_market_cap: 0,
+    stablecoin_24h_percentage_change: 0,
+    derivatives_volume_24h: 0,
+    derivatives_24h_percentage_change: 0,
+  });
   const [page, setPage] = useState(PAGINATION[0]);
 
   const currentText = iscurrency ? 'USD' : 'KRW';
@@ -48,7 +67,6 @@ const Market = () => {
   const getDominance = async () => {
     const res = await getDominanceApi();
     setDominance(res);
-    console.log(res);
   };
 
   useEffect(() => {
@@ -59,6 +77,19 @@ const Market = () => {
   useEffect(() => {
     handlePublicRank();
     getDominance();
+  }, []);
+
+  const handleOpenModal = () => {
+    setIsOpenModal(true);
+  };
+
+  const getPortFolio = async () => {
+    const data = await getPortFolioApi();
+    setBookMarkCoin(data);
+  };
+
+  useEffect(() => {
+    getPortFolio();
   }, []);
 
   return (
@@ -91,7 +122,7 @@ const Market = () => {
       </section>
 
       <section className={styles.marketTop}>
-        <div>
+        <div className={styles.trendWrap}>
           <div className={styles.trendTitle}>
             <img src={TrendingIcon} alt='trendIcon' />
             <h3>실시간 인기 코인 순위</h3>
@@ -116,12 +147,27 @@ const Market = () => {
             })}
           </ul>
         </div>
-        <div>
+        <div className={styles.dominanceWrap}>
           <div className={styles.dominanceTitle}>
             <DominanceIcon />
             <h3>도미넌스</h3>
           </div>
-          {/* <ul>{dominance.map()}</ul> */}
+          <ul>
+            <li>
+              <dl>
+                <dt>BTC.D</dt>
+                <dd>{`${dominance.btc_dominance.toFixed(2)}%`}</dd>
+                <dd>{`${dominance.btc_dominance_24h_percentage_change.toFixed(2)}%`}</dd>
+              </dl>
+            </li>
+            <li>
+              <dl>
+                <dt>ETH.D</dt>
+                <dd>{`${dominance.eth_dominance.toFixed(2)}%`}</dd>
+                <dd>{`${dominance.eth_dominance_24h_percentage_change.toFixed(2)}%`}</dd>
+              </dl>
+            </li>
+          </ul>
         </div>
       </section>
 
@@ -136,7 +182,8 @@ const Market = () => {
 
       <table className={styles.marketTable}>
         <colgroup>
-          <col width='8%' />
+          <col width='5%' />
+          <col width='3%' />
           <col width='16%' />
           <col width='6%' />
           <col width='10%' />
@@ -148,7 +195,7 @@ const Market = () => {
         </colgroup>
         <thead>
           <tr>
-            <th>#</th>
+            <th colSpan={2}>#</th>
             <th colSpan={2}>코인</th>
             <th>현재가</th>
             <th>최고가(24h)</th>
@@ -161,10 +208,11 @@ const Market = () => {
         <tbody>
           {coinList &&
             coinList.map((item) => {
-              return <MarketItem key={item.id} item={item} currency={iscurrency} />;
+              return <MarketItem key={item.id} item={item} currency={iscurrency} handleOpenModal={handleOpenModal} />;
             })}
         </tbody>
       </table>
+      {isOpenModal && <Modal />}
       <ol>
         {PAGINATION.map((item) => {
           return (

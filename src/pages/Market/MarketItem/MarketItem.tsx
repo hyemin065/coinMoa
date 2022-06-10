@@ -1,13 +1,23 @@
+import { useRecoilValue } from 'recoil';
+import { StarActiveIcon, StarIcon } from '../../../assets';
 import { useUnitCommaData } from '../../../hooks/useUnitCommaData';
-import { IMarketCoin } from '../../../types/coin';
+import { coinListState } from '../../../recoil/recoil';
+import { IMarketCoin, IUserCoinList } from '../../../types/coin';
 
 import styles from './marketItem.module.scss';
 
 interface IProps {
   item: IMarketCoin;
   currency: boolean;
+  handleOpenModal: () => void;
 }
-const MarketItem = ({ currency, item }: IProps) => {
+const MarketItem = ({ currency, item, handleOpenModal }: IProps) => {
+  const bookMarkCoin = useRecoilValue<IUserCoinList[]>(coinListState);
+
+  const bookMarkList = bookMarkCoin.map((items) => items.name);
+
+  const bookMarkActive = bookMarkList.includes(item.name);
+  console.log(bookMarkCoin);
   const currentPrice = useUnitCommaData(currency, item.current_price !== null ? item.current_price : 0);
   const highPrice = useUnitCommaData(currency, item.high_24h !== null ? item.high_24h : 0);
   const lowPrice = useUnitCommaData(currency, item.low_24h !== null ? item.low_24h : 0);
@@ -16,6 +26,11 @@ const MarketItem = ({ currency, item }: IProps) => {
 
   return (
     <tr>
+      <td className={styles.bookmark}>
+        <button type='button' onClick={handleOpenModal}>
+          {bookMarkActive ? <StarActiveIcon /> : <StarIcon />}
+        </button>
+      </td>
       <td className={styles.rank}>{item.market_cap_rank}</td>
       <td>
         <dl>
