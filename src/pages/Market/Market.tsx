@@ -1,16 +1,21 @@
 import { useEffect, useState } from 'react';
 
-import { getCoinMarketApi } from '../../services/getCoinApi';
-import { IMarketCoin } from '../../types/coin';
+import { getCoinMarketApi, getDominanceApi, getTrendingCoin } from '../../services/getCoinApi';
+import { IDominance, IMarketCoin, ITrendCoinArray } from '../../types/coin';
 import MarketItem from './MarketItem/MarketItem';
 
 import styles from './market.module.scss';
+import ScrollTopButton from '../../components/ScrollTopButton/ScrollTopButton';
+import TrendingIcon from '../../assets/trendingIcon.png';
+import { DominanceIcon } from '../../assets';
 
 const PAGINATION = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const Market = () => {
   const [coinList, setCoinList] = useState<IMarketCoin[]>([]);
   const [iscurrency, setIsCurrent] = useState(false);
+  const [trendCoin, setTrendCoin] = useState<ITrendCoinArray[]>([]);
+  const [dominance, setDominance] = useState<IDominance[]>([]);
   const [page, setPage] = useState(PAGINATION[0]);
 
   const currentText = iscurrency ? 'USD' : 'KRW';
@@ -34,14 +39,32 @@ const Market = () => {
     setCoinList(res);
   };
 
+  const handlePublicRank = async () => {
+    const res = await getTrendingCoin();
+    const data = res.slice(0, 3);
+    setTrendCoin(data);
+  };
+
+  const getDominance = async () => {
+    const res = await getDominanceApi();
+    setDominance(res);
+    console.log(res);
+  };
+
   useEffect(() => {
     getApiData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, iscurrency]);
 
+  useEffect(() => {
+    handlePublicRank();
+    getDominance();
+  }, []);
+
   return (
     <div className={styles.container}>
-      <div className={styles.titleWrap}>
+      <ScrollTopButton />
+      <section className={styles.titleWrap}>
         <div>
           <h2>
             시가총액별 암호화폐 시세
@@ -65,9 +88,53 @@ const Market = () => {
             <span>$</span>
           </button>
         </div>
-      </div>
+      </section>
 
-      <table>
+      <section className={styles.marketTop}>
+        <div>
+          <div className={styles.trendTitle}>
+            <img src={TrendingIcon} alt='trendIcon' />
+            <h3>실시간 인기 코인 순위</h3>
+          </div>
+          <ul>
+            {trendCoin.map((item) => {
+              return (
+                <li key={item.item.coin_id}>
+                  <span>{item.item.score + 1}</span>
+                  <div>
+                    <dl>
+                      <dt>
+                        <img src={item.item.thumb} alt='' />
+                        {item.item.name}
+                      </dt>
+                      <dd>{item.item.symbol}</dd>
+                    </dl>
+                    <p>Rank.{item.item.market_cap_rank}</p>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+        <div>
+          <div className={styles.dominanceTitle}>
+            <DominanceIcon />
+            <h3>도미넌스</h3>
+          </div>
+          {/* <ul>{dominance.map()}</ul> */}
+        </div>
+      </section>
+
+      <ul>
+        <li>
+          <a href=''>즐겨찾기</a>
+        </li>
+        <li>
+          <a href=''>100</a>
+        </li>
+      </ul>
+
+      <table className={styles.marketTable}>
         <colgroup>
           <col width='8%' />
           <col width='16%' />

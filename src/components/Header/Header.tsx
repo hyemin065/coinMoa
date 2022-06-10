@@ -38,6 +38,10 @@ const Header = () => {
             암호화폐
           </NavLink>
 
+          <NavLink to='exchange' className={({ isActive }) => cx({ [styles.isActive]: isActive })}>
+            거래소
+          </NavLink>
+
           <NavLink to='portFolio' className={({ isActive }) => cx({ [styles.isActive]: isActive })}>
             포트폴리오
           </NavLink>

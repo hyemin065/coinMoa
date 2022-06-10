@@ -1,0 +1,116 @@
+@use '/src/styles/mixins/flexbox';
+@use '/src/styles/mixins/position';
+@use '/src/styles/constants/colors';
+
+.container {
+  width: 1200px;
+  margin: 0 auto;
+  color: colors.$WHITE;
+
+  .titleWrap {
+    margin-bottom: 30px;
+
+    h2 {
+      margin-bottom: 12px;
+      font-size: 22px;
+      font-weight: 600;
+
+      span {
+        margin-left: 5px;
+        font-size: 16px;
+      }
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 20px;
+      color: colors.$SUB_TEXT_COLOR;
+    }
+  }
+
+  .exchangeTable {
+    width: 100%;
+    margin-bottom: 20px;
+    border-top: 1px solid colors.$SUB_COLOR;
+
+    tr {
+      th,
+      td {
+        height: 55px;
+        padding: 0 15px;
+        text-align: right;
+
+        &:first-child,
+        &:nth-child(3) {
+          text-align: center;
+        }
+
+        &:nth-child(2) {
+          text-align: left;
+        }
+      }
+
+      th {
+        background: #181818;
+      }
+
+      td {
+        color: colors.$WHITE;
+
+        .graph {
+          @include flexbox.flexbox(center, center);
+          position: relative;
+          width: 100px;
+          height: 12px;
+          background-color: colors.$WHITE;
+          border-radius: 20px;
+
+          span {
+            position: absolute;
+            left: 0;
+            width: 80%;
+            height: 100%;
+            background-color: colors.$PLUS;
+            border-radius: 20px;
+
+            &.warning {
+              background-color: yellow;
+            }
+          }
+
+          p {
+            position: absolute;
+            right: -25px;
+          }
+        }
+
+        a {
+          color: colors.$WHITE;
+          word-break: break-all;
+        }
+
+        img {
+          width: 30px;
+          margin-right: 10px;
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+
+  ol {
+    @include flexbox.flexbox(center, center);
+
+    li {
+      button {
+        padding: 10px;
+        font-size: 14px;
+        color: colors.$WHITE;
+
+        &.active {
+          color: colors.$MAIN_COLOR;
+        }
+      }
+    }
+  }
+}

@@ -132,7 +132,7 @@ const PortFolio = () => {
                   </button>
                 </div>
 
-                <table>
+                <table className={styles.portFolioTable}>
                   <thead>
                     <tr>
                       <th>거래일</th>

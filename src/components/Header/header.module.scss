@@ -43,7 +43,7 @@
 
     .sign {
       @include flexbox.flexbox(end, center);
-      width: calc(100% - 390px);
+      width: calc(100% - 440px);
 
       p {
         font-size: 14px;

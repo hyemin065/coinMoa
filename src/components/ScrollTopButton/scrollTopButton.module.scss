@@ -1,0 +1,16 @@
+@use '/src/styles/mixins/position';
+@use '/src/styles/constants/colors';
+
+.topButton {
+  @include position.fixed(auto 30px 30px auto);
+  width: 30px;
+  height: 30px;
+  padding: 6px;
+  border: 1px solid colors.$SUB_TEXT_COLOR;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    fill: colors.$SUB_TEXT_COLOR;
+  }
+}

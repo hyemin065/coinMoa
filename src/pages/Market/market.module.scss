@@ -1,5 +1,6 @@
 @use '/src/styles/mixins/flexbox';
 @use '/src/styles/constants/colors';
+@use '/src/styles/mixins/position';
 
 .container {
   width: 1200px;
@@ -71,7 +72,7 @@
     }
   }
 
-  table {
+  .marketTable {
     width: 100%;
     margin-bottom: 20px;
     border-top: 1px solid colors.$SUB_COLOR;
@@ -131,6 +132,90 @@
 
         &.active {
           color: colors.$MAIN_COLOR;
+        }
+      }
+    }
+  }
+}
+
+.marketTop {
+  @include flexbox.flexbox(between, center);
+
+  > div {
+    position: relative;
+    width: 49%;
+    height: 170px;
+    padding: 15px 25px;
+    background-color: #1e1e1e;
+    border-radius: 6px;
+
+    .trendTitle,
+    .dominanceTitle {
+      @include flexbox.flexbox(start, center);
+      margin-bottom: 12px;
+
+      h3 {
+        margin-left: 10px;
+        font-size: 14px;
+      }
+
+      img,
+      svg {
+        width: 28px;
+      }
+    }
+
+    ul {
+      margin-left: 10px;
+
+      li {
+        @include flexbox.flexbox(start, center);
+        margin-bottom: 10px;
+
+        &::before {
+          @include position.absolute(0 auto auto 0);
+          display: block;
+          width: 8px;
+          height: 100%;
+          content: '';
+          background-color: colors.$PLUS;
+          border-top-left-radius: 6px;
+          border-bottom-left-radius: 6px;
+        }
+
+        span {
+          margin-right: 15px;
+          font-size: 12px;
+          color: #a9a9a9;
+        }
+
+        > div {
+          @include flexbox.flexbox(between, center);
+          width: 96%;
+
+          dl {
+            margin-left: 10px;
+            @include flexbox.flexbox(start, center);
+            font-size: 14px;
+
+            dt {
+              img {
+                width: 22px;
+                margin-right: 10px;
+                vertical-align: middle;
+              }
+            }
+
+            dd {
+              margin-left: 40px;
+              color: colors.$SUB_TEXT_COLOR;
+            }
+          }
+
+          p {
+            font-size: 14px;
+            color: #a9a9a9;
+          }
         }
       }
     }
