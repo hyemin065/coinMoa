@@ -1,6 +1,6 @@
 import { useRecoilValue } from 'recoil';
 import { StarActiveIcon, StarIcon } from '../../../assets';
-import { useUnitCommaData } from '../../../hooks/useUnitCommaData';
+import { useUnitCommaData } from '../../../utils/useUnitCommaData';
 import { coinListState } from '../../../recoil/recoil';
 import { IMarketCoin, IUserCoinList } from '../../../types/coin';
 
@@ -14,7 +14,6 @@ interface IProps {
 }
 const MarketItem = ({ currency, item, handleOpenModal, handleBookMarkGetName }: IProps) => {
   const bookMarkCoin = useRecoilValue<IUserCoinList[]>(coinListState);
-
   const currentPrice = useUnitCommaData(currency, item.current_price !== null ? item.current_price : 0);
   const highPrice = useUnitCommaData(currency, item.high_24h !== null ? item.high_24h : 0);
   const lowPrice = useUnitCommaData(currency, item.low_24h !== null ? item.low_24h : 0);

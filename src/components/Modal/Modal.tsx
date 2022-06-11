@@ -33,7 +33,7 @@ const Modal = () => {
   const [quantity, setQuantity] = useState(1);
   const [isOpenModal, setIsOpenModal] = useRecoilState(modalState);
   const [isShowSearchResult, setIsShowSearchResult] = useState(false);
-  const [modalError, setModalError] = useState('');
+  const [submitError, setSubmitError] = useState('');
 
   const userCoinList = useRecoilValue<IUserCoinList[]>(coinListState);
   const date = useRecoilValue(dateState);
@@ -60,11 +60,13 @@ const Modal = () => {
 
   useEffect(() => {
     handleGetBookMark();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSearchInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
     setSearchValueId(value);
+
     if (value !== '') {
       const res = await getCoinSearchApi({
         query: value,
@@ -99,7 +101,6 @@ const Modal = () => {
   const handleChangePrice = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
     setTransactionPrice(Number(value));
-    // setTransactionPrice(removedCommaValue.toLocaleString());
   };
 
   const handleChangeQuantity = (e: ChangeEvent<HTMLInputElement>) => {
@@ -131,7 +132,22 @@ const Modal = () => {
       return item.market === marketValue && item.apiCallName === searchValueId;
     });
 
-    if (portFolioCoin.length > 0) {
+    if (quantity <= 0) {
+      setSubmitError('수량을 0보다 크게 입력해주세요');
+      return;
+    }
+
+    if (transactionPrice <= 0) {
+      setSubmitError('금액을 0보다 크게 입력해주세요');
+      return;
+    }
+
+    if (searchValueId === '') {
+      setSubmitError('코인');
+      return;
+    }
+
+    if (portFolioCoin.length > 0 && quantity > 0) {
       await updateCoinApi(
         portFolioCoin,
         uniqueId,
@@ -151,9 +167,10 @@ const Modal = () => {
 
       if (transaction === 'sell' && portFolioCoin[0].quantity - quantity <= 0) {
         await deleteCoinApi(uniqueId, searchValueId, marketValue);
+        window.location.reload();
       }
     }
-    if (portFolioCoin.length === 0 && transaction === 'buy') {
+    if (portFolioCoin.length === 0 && transaction === 'buy' && quantity > 0) {
       await addCoinApi(
         uniqueId,
         searchValueId,
@@ -167,10 +184,11 @@ const Modal = () => {
         transactionPrice,
         quantity
       );
+
       setIsOpenModal(false);
       window.location.reload();
     } else {
-      setModalError('매도할 수 있는 코인이 없습니다');
+      setSubmitError('매도할 수 있는 코인이 없습니다');
     }
   };
 
@@ -231,12 +249,7 @@ const Modal = () => {
         <h3>거래가격</h3>
         <div className={styles.inputWrap}>
           <span>{selectCurrency}</span>
-          <input
-            type='text'
-            placeholder='매수가를 입력해주세요'
-            value={transactionPrice}
-            onChange={handleChangePrice}
-          />
+          <input type='text' placeholder='가격을 입력해주세요' value={transactionPrice} onChange={handleChangePrice} />
         </div>
 
         <h3>수량</h3>
@@ -244,7 +257,7 @@ const Modal = () => {
           <input type='number' placeholder='수량을 입력해주세요' onChange={handleChangeQuantity} value={quantity} />
         </div>
 
-        <p className={styles.errorMsg}>{modalError}</p>
+        <p className={styles.errorMsg}>{submitError}</p>
 
         <div className={styles.buttonWrap}>
           <button type='button' onClick={handleSubmitAddCoin}>

@@ -111,9 +111,8 @@ export const getPortFolioApi = async () => {
       return {
         ...item,
         price,
-        totalAmount: item.currency === 'krw' ? `₩${item.average * item.quantity}` : `$${item.average * item.quantity}`,
-        evaluationAmount:
-          item.currency === 'krw' ? `₩${presentPrice * item.quantity}` : `$${presentPrice * item.quantity}`,
+        totalAmount: item.average * item.quantity,
+        evaluationAmount: presentPrice * item.quantity,
         valuationPL: presentPrice * item.quantity - item.average * item.quantity,
         return: (((presentPrice - item.average) / item.average) * 100).toFixed(2),
       };
@@ -154,6 +153,7 @@ export const addCoinApi = async (
       quantity,
       totalAmount: Number(transactionPrice) * quantity,
     });
+
     return;
   } catch (error) {
     throw new Error((error as Error).message);
@@ -201,8 +201,9 @@ export const updateCoinApi = async (
       transactionPrice,
       average:
         transaction === 'buy'
-          ? portFolioCoin[0].average + Number(transactionPrice)
-          : portFolioCoin[0].average - Number(transactionPrice),
+          ? (portFolioCoin[0].totalAmount + Number(transactionPrice) * quantity) /
+            (portFolioCoin[0].quantity + quantity)
+          : portFolioCoin[0].average,
       quantity:
         transaction === 'buy'
           ? portFolioCoin[0].quantity + Number(quantity)
@@ -212,6 +213,7 @@ export const updateCoinApi = async (
           ? portFolioCoin[0].totalAmount + Number(transactionPrice) * Number(quantity)
           : portFolioCoin[0].totalAmount - Number(transactionPrice) * Number(quantity),
     });
+
     return;
   } catch (error) {
     throw new Error((error as Error).message);

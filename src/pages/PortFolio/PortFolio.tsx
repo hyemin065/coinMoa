@@ -10,6 +10,7 @@ import Modal from '../../components/Modal/Modal';
 import styles from './portFolio.module.scss';
 import { Link } from 'react-router-dom';
 import PortFolioItem from './PortFolioItem/PortFolioItem';
+import { useUnitCommaData } from '../../utils/useUnitCommaData';
 
 const MARKET_CATE = ['binance', 'upbit', 'bithumb'];
 
@@ -24,6 +25,8 @@ const PortFolio = () => {
   const isLogin = useRecoilValue(isLoginState);
 
   const list = marketValue ? marketList : userCoinList;
+  // console.log(list);
+  const unitComma = useUnitCommaData;
 
   const krwValuationPL = userCoinList.filter((item: IUserCoinList) => {
     return item.currency === 'krw';
@@ -33,11 +36,11 @@ const PortFolio = () => {
   });
 
   const totalAssetsKRW = krwValuationPL.reduce((acc: number, cur: IUserCoinList) => {
-    return acc + cur.valuationPL;
+    return acc + cur.evaluationAmount;
   }, 0);
 
   const totalAssetsUSD = usdValuationPL.reduce((acc: number, cur: IUserCoinList) => {
-    return acc + cur.valuationPL;
+    return acc + cur.evaluationAmount;
   }, 0);
 
   const handleChangeCurrent = () => {
@@ -75,10 +78,12 @@ const PortFolio = () => {
         const name = item.apiCallName;
         const price = coinPrice[name];
         const presentPrice = price[item.currency];
+
         return {
           ...item,
           price,
           totalAmount: item.average * item.quantity,
+          average: item.average,
           evaluationAmount: presentPrice * item.quantity,
           valuationPL: presentPrice * item.quantity - item.average * item.quantity,
           return: (((presentPrice - item.average) / item.average) * 100).toFixed(2),
@@ -96,6 +101,23 @@ const PortFolio = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleGetMarketAssets = (marketVal: string) => {
+    const market = userCoinList.filter((item) => item.market === marketVal);
+
+    const totalAssets = market.reduce((acc, cur) => {
+      const marketAssets = {
+        binance: acc + cur.evaluationAmount,
+        upbit: acc + cur.evaluationAmount,
+        bithumb: acc + cur.evaluationAmount,
+      }[marketVal];
+      if (!marketAssets) return 0;
+      return marketAssets;
+    }, 0);
+    return marketVal === 'binance'
+      ? `${unitComma(false, totalAssets.toFixed(2))}`
+      : `${unitComma(true, totalAssets.toFixed(2))}`;
+  };
+
   return (
     <div className={styles.container}>
       {isLogin ? (
@@ -104,7 +126,7 @@ const PortFolio = () => {
             <li>
               <button type='button' onClick={() => setMarketValue(false)}>
                 <h3>총자산</h3>
-                <p>{isCurrencyAssets ? `₩${totalAssetsKRW.toFixed(2)}` : `$${totalAssetsUSD}`}</p>
+                <p>{unitComma(isCurrencyAssets, isCurrencyAssets ? `${totalAssetsUSD}` : `${totalAssetsKRW}`)}</p>
               </button>
               <div className={styles.toggle}>
                 <button
@@ -115,12 +137,16 @@ const PortFolio = () => {
                 />
               </div>
             </li>
+
             {MARKET_CATE.map((item) => {
               return (
                 <li key={Math.random() * 1000}>
                   <button type='button' onClick={() => handleShowMarketCoin(item)}>
                     <span className={styles.marketName}>{item}</span>
+                    <h3>{item} 자산</h3>
+                    <p>{handleGetMarketAssets(item)} </p>
                   </button>
+                  <div />
                 </li>
               );
             })}

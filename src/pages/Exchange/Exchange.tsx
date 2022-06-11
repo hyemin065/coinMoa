@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import ScrollTopButton from '../../components/ScrollTopButton/ScrollTopButton';
 import { getExchange } from '../../services/getCoinApi';
 import { IExchange } from '../../types/coin';
+import { useUnitCommaData } from '../../utils/useUnitCommaData';
 import styles from './exchange.module.scss';
 
 const PAGINATION = [1, 2, 3];
@@ -24,7 +25,7 @@ const Exchange = () => {
   const handleClickPage = (item: number) => {
     setPage(item);
   };
-
+  const unitComma = useUnitCommaData;
   return (
     <div className={styles.container}>
       <ScrollTopButton />
@@ -74,7 +75,7 @@ const Exchange = () => {
                     <div>N/A</div>
                   )}
                 </td>
-                <td>{`$${item.trade_volume_24h_btc.toFixed(2)}`}</td>
+                <td>{unitComma(true, item.trade_volume_24h_btc.toFixed(2))}</td>
                 <td>
                   <a href={item.url} target='_blank' rel='noreferrer'>
                     {item.url}

@@ -4,13 +4,14 @@ import { getCoinMarketApi, getDominanceApi, getPortFolioApi, getTrendingCoin } f
 import { IDominance, IMarketCoin, ITrendCoinArray, IUserCoinList } from '../../types/coin';
 import MarketItem from './MarketItem/MarketItem';
 
-import styles from './market.module.scss';
 import ScrollTopButton from '../../components/ScrollTopButton/ScrollTopButton';
 import TrendingIcon from '../../assets/trendingIcon.png';
 import { DominanceIcon } from '../../assets';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { bookMarkCoinNameState, coinListState, modalState } from '../../recoil/recoil';
 import Modal from '../../components/Modal/Modal';
+import { useUnitCommaData } from '../../utils/useUnitCommaData';
+import styles from './market.module.scss';
 
 const PAGINATION = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -40,6 +41,7 @@ const Market = () => {
   const currentText = iscurrency ? 'USD' : 'KRW';
 
   const setBookMarkCoinName = useSetRecoilState(bookMarkCoinNameState);
+
   const handleChangeCurrent = () => {
     setIsCurrent((prev) => !prev);
   };
@@ -97,6 +99,7 @@ const Market = () => {
     getPortFolio();
   }, []);
 
+  const unitComma = useUnitCommaData;
   return (
     <div className={styles.container}>
       <ScrollTopButton />
@@ -176,25 +179,25 @@ const Market = () => {
             <li>
               <dl>
                 <dt>Defi Volume (24h)</dt>
-                <dd>{`${dominance.defi_volume_24h.toFixed(2)}`}</dd>
+                <dd>{unitComma(true, `${dominance.defi_volume_24h.toFixed(2)}`)}</dd>
               </dl>
             </li>
             <li>
               <dl>
                 <dt>Defi MarketCap</dt>
-                <dd>{`${dominance.defi_market_cap.toFixed(2)}`}</dd>
+                <dd>{unitComma(true, `${dominance.defi_market_cap.toFixed(2)}`)}</dd>
               </dl>
             </li>
             <li>
               <dl>
                 <dt>Stablecoin Volume(24h)</dt>
-                <dd>{`${dominance.stablecoin_volume_24h.toFixed(2)}`}</dd>
+                <dd>{unitComma(true, `${dominance.stablecoin_volume_24h.toFixed(2)}`)}</dd>
               </dl>
             </li>
             <li>
               <dl>
                 <dt>Stablecoin MarketCap</dt>
-                <dd>{`${dominance.stablecoin_market_cap.toFixed(2)}`}</dd>
+                <dd>{unitComma(true, `${dominance.stablecoin_market_cap.toFixed(2)}`)}</dd>
               </dl>
             </li>
           </ul>

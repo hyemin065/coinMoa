@@ -12,7 +12,6 @@ const DateCalendar = () => {
   const [isShowCalendar, setIsShowCalendar] = useState(false);
 
   const setDate = useSetRecoilState(dateState);
-
   const SelectDate = dayjs(value).format('YYYY-MM-DD');
 
   const modalRef = useRef<HTMLDivElement>(null);
