@@ -6,6 +6,7 @@ interface IProps {
 }
 
 const PortFolioItem = ({ item }: IProps) => {
+  const coinCurrency = item.currency === 'krw' ? '₩' : '$';
   return (
     <tr>
       <td>{item.date}</td>
@@ -17,15 +18,27 @@ const PortFolioItem = ({ item }: IProps) => {
         {item.name}
       </td>
       <td>{item.symbol}</td>
-      <td>{`${item.currency === 'krw' ? `₩${item.price.krw}` : `$${item.price.usd}`}`}</td>
+      <td>
+        {coinCurrency}
+        {item.price.krw}
+      </td>
       {/* 내평단 */}
-      <td>{`${item.currency === 'krw' ? `₩${item.average}` : `$${item.average}`}`}</td>
+      <td>
+        {coinCurrency}
+        {item.average}
+      </td>
       {/* 보유수량 */}
       <td>{item.quantity}</td>
       {/* 매수금액 */}
-      <td>{item.totalAmount}</td>
+      <td>
+        {coinCurrency}
+        {item.totalAmount}
+      </td>
       {/* 평가금액 */}
-      <td>{item.evaluationAmount}</td>
+      <td>
+        {coinCurrency}
+        {item.evaluationAmount}
+      </td>
       {/* 평가손익 */}
       <td className={item.valuationPL > 0 ? `${styles.plus}` : `${styles.minus}`}>
         {item.valuationPL > 0 ? `+${item.valuationPL.toFixed(2)}` : item.valuationPL.toFixed(2)}

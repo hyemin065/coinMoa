@@ -5,6 +5,7 @@
 .modalWrap {
   width: 100%;
   height: 100%;
+  padding: 20px;
   background-color: rgba(0, 0, 0, 70%);
   transform: translate(-50%, -50%);
   @include flexbox.flexbox(center, center);
@@ -17,9 +18,15 @@
 
   .modalContainer {
     width: 360px;
+    max-height: 100%;
     padding: 40px 30px 10px;
+    overflow: auto;
     background-color: colors.$BG_COLOR;
     border-radius: 6px;
+
+    &::-webkit-scrollbar {
+      display: none; // Chrome
+    }
 
     h3 {
       margin-bottom: 12px;
@@ -93,6 +100,7 @@
       span {
         font-size: 16px;
         color: colors.$WHITE;
+        text-transform: uppercase;
       }
 
       input {

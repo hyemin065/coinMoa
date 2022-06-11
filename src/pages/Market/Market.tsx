@@ -9,7 +9,7 @@ import ScrollTopButton from '../../components/ScrollTopButton/ScrollTopButton';
 import TrendingIcon from '../../assets/trendingIcon.png';
 import { DominanceIcon } from '../../assets';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { coinListState, modalState } from '../../recoil/recoil';
+import { bookMarkCoinNameState, coinListState, modalState } from '../../recoil/recoil';
 import Modal from '../../components/Modal/Modal';
 
 const PAGINATION = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -39,6 +39,7 @@ const Market = () => {
 
   const currentText = iscurrency ? 'USD' : 'KRW';
 
+  const setBookMarkCoinName = useSetRecoilState(bookMarkCoinNameState);
   const handleChangeCurrent = () => {
     setIsCurrent((prev) => !prev);
   };
@@ -83,6 +84,10 @@ const Market = () => {
     setIsOpenModal(true);
   };
 
+  const handleBookMarkGetName = (name: any) => {
+    setBookMarkCoinName(name);
+  };
+
   const getPortFolio = async () => {
     const data = await getPortFolioApi();
     setBookMarkCoin(data);
@@ -96,29 +101,16 @@ const Market = () => {
     <div className={styles.container}>
       <ScrollTopButton />
       <section className={styles.titleWrap}>
-        <div>
-          <h2>
-            시가총액별 암호화폐 시세
-            <span>({currentText})</span>
-          </h2>
-          <p>
-            전 세계 암호화폐 시가총액은 $1.28조입니다.
-            <br />
-            COINMOA는 현재 13,442개의 암호화폐를 추적하고 있습니다. 현재 업계의 인기 있는 트렌드는 DeFi 및 Play to Earn
-            입니다.
-          </p>
-        </div>
-        <div className={styles.toggle}>
-          <button
-            type='button'
-            onClick={handleChangeCurrent}
-            className={iscurrency ? `${styles.currentUSD}` : ''}
-            aria-label='toggle current'
-          >
-            <span>₩</span>
-            <span>$</span>
-          </button>
-        </div>
+        <h2>
+          시가총액별 암호화폐 시세
+          <span>({currentText})</span>
+        </h2>
+        <p>
+          전 세계 암호화폐 시가총액은 $1.28조입니다.
+          <br />
+          COINMOA는 현재 13,442개의 암호화폐를 추적하고 있습니다. 현재 업계의 인기 있는 트렌드는 DeFi 및 Play to Earn
+          입니다.
+        </p>
       </section>
 
       <section className={styles.marketTop}>
@@ -171,12 +163,17 @@ const Market = () => {
         </div>
       </section>
 
-      <ul>
-        <li>
-          <a href=''>즐겨찾기</a>
-        </li>
-        <li>
-          <a href=''>100</a>
+      <ul className={styles.category}>
+        <li className={styles.toggle}>
+          <button
+            type='button'
+            onClick={handleChangeCurrent}
+            className={iscurrency ? `${styles.currentUSD}` : ''}
+            aria-label='toggle current'
+          >
+            <span>₩</span>
+            <span>$</span>
+          </button>
         </li>
       </ul>
 
@@ -208,11 +205,19 @@ const Market = () => {
         <tbody>
           {coinList &&
             coinList.map((item) => {
-              return <MarketItem key={item.id} item={item} currency={iscurrency} handleOpenModal={handleOpenModal} />;
+              return (
+                <MarketItem
+                  key={item.id}
+                  item={item}
+                  currency={iscurrency}
+                  handleOpenModal={handleOpenModal}
+                  handleBookMarkGetName={handleBookMarkGetName}
+                />
+              );
             })}
         </tbody>
       </table>
-      {isOpenModal && <Modal />}
+
       <ol>
         {PAGINATION.map((item) => {
           return (
@@ -228,6 +233,8 @@ const Market = () => {
           );
         })}
       </ol>
+
+      {isOpenModal && <Modal />}
     </div>
   );
 };

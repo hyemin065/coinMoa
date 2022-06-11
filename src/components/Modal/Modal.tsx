@@ -1,10 +1,10 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { coinListState, dateState, modalState } from '../../recoil/recoil';
+import { bookMarkCoinNameState, coinListState, dateState, modalState } from '../../recoil/recoil';
 import axios from 'axios';
 
-import { getCoinSearchApi } from '../../services/getCoinApi';
+import { addCoinApi, getCoinSearchApi } from '../../services/getCoinApi';
 import { ISearchCoin, IUserCoinList } from '../../types/coin';
 import DateCalendar from '../DatePicker/DateCalendar';
 import Radio from '../Radio/Radio';
@@ -34,12 +34,34 @@ const Modal = () => {
   const [quantity, setQuantity] = useState(1);
   const [isOpenModal, setIsOpenModal] = useRecoilState(modalState);
   const [isShowSearchResult, setIsShowSearchResult] = useState(false);
+  const [modalError, setModalError] = useState('');
 
   const userCoinList = useRecoilValue<IUserCoinList[]>(coinListState);
   const date = useRecoilValue(dateState);
   const modalRef = useRef<HTMLDivElement>(null);
 
   const selectCurrency = marketValue === 'binance' ? 'usd' : 'krw';
+
+  const bookMarkCoinName = useRecoilValue(bookMarkCoinNameState);
+
+  const handleGetBookMark = async () => {
+    if (bookMarkCoinName !== '') {
+      const data = await getCoinSearchApi({
+        query: bookMarkCoinName,
+      });
+      const bookMarkCoin = data.filter((items: ISearchCoin) => {
+        return items.id === bookMarkCoinName;
+      });
+      setSearchValueId(bookMarkCoin[0].id);
+      setSearchValueName(bookMarkCoin[0].name);
+      setSearchValueSymbol(bookMarkCoin[0].symbol);
+      setSearchValueThumb(bookMarkCoin[0].thumb);
+    }
+  };
+
+  useEffect(() => {
+    handleGetBookMark();
+  }, []);
 
   const handleSearchInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
@@ -106,10 +128,11 @@ const Modal = () => {
   };
 
   const handleSubmitAddCoin = async () => {
-    const aa = userCoinList.filter((item) => {
+    const portFolioCoin = userCoinList.filter((item) => {
       return item.market === marketValue && item.apiCallName === searchValueId;
     });
-    if (aa.length > 0) {
+    console.log(portFolioCoin);
+    if (portFolioCoin.length > 0) {
       try {
         await axios.post('https://coin-moa.herokuapp.com/coin/update', {
           userId: uniqueId,
@@ -119,25 +142,30 @@ const Modal = () => {
           symbol: searchValueSymbol,
           thumb: searchValueThumb,
           currency: selectCurrency,
-          transaction,
           date,
+          transaction,
           transactionPrice,
           average:
-            transaction === 'buy' ? aa[0].average + Number(transactionPrice) : aa[0].average - Number(transactionPrice),
-          quantity: transaction === 'buy' ? aa[0].quantity + Number(quantity) : aa[0].quantity - Number(quantity),
+            transaction === 'buy'
+              ? portFolioCoin[0].average + Number(transactionPrice)
+              : portFolioCoin[0].average - Number(transactionPrice),
+          quantity:
+            transaction === 'buy'
+              ? portFolioCoin[0].quantity + Number(quantity)
+              : portFolioCoin[0].quantity - Number(quantity),
           totalAmount:
             transaction === 'buy'
-              ? aa[0].totalAmount + Number(transactionPrice) * Number(quantity)
-              : aa[0].totalAmount - Number(transactionPrice) * Number(quantity),
+              ? portFolioCoin[0].totalAmount + Number(transactionPrice) * Number(quantity)
+              : portFolioCoin[0].totalAmount - Number(transactionPrice) * Number(quantity),
         });
-        window.location.reload();
 
+        window.location.reload();
         setIsOpenModal(false);
       } catch (error) {
         throw new Error((error as Error).message);
       }
 
-      if (transaction === 'sell' && aa[0].quantity - quantity <= 0) {
+      if (transaction === 'sell' && portFolioCoin[0].quantity - quantity <= 0) {
         try {
           await axios.post('https://coin-moa.herokuapp.com/coin/delete', {
             userId: uniqueId,
@@ -149,28 +177,25 @@ const Modal = () => {
           throw new Error((error as Error).message);
         }
       }
+    }
+    if (portFolioCoin.length === 0 && transaction === 'buy') {
+      await addCoinApi(
+        uniqueId,
+        searchValueId,
+        marketValue,
+        searchValueName,
+        searchValueSymbol,
+        searchValueThumb,
+        selectCurrency,
+        transaction,
+        date,
+        transactionPrice,
+        quantity
+      );
+      setIsOpenModal(false);
+      window.location.reload();
     } else {
-      try {
-        await axios.post('https://coin-moa.herokuapp.com/coin/coinAdd', {
-          userId: uniqueId,
-          apiCallName: searchValueId,
-          market: marketValue,
-          name: searchValueName,
-          symbol: searchValueSymbol,
-          thumb: searchValueThumb,
-          currency: selectCurrency,
-          transaction,
-          date,
-          transactionPrice,
-          average: Number(transactionPrice),
-          quantity,
-          totalAmount: Number(transactionPrice) * quantity,
-        });
-        setIsOpenModal(false);
-        window.location.reload();
-      } catch (error) {
-        throw new Error((error as Error).message);
-      }
+      setModalError('매도할 수 있는 코인이 없습니다');
     }
   };
 
@@ -193,7 +218,7 @@ const Modal = () => {
         <div className={styles.searchWrap}>
           <input
             type='text'
-            value={searchValueId}
+            value={bookMarkCoinName || searchValueId}
             onChange={handleSearchInputChange}
             placeholder='코인을 입력해주세요'
           />
@@ -243,6 +268,8 @@ const Modal = () => {
         <div className={styles.quantityWrap}>
           <input type='number' placeholder='수량을 입력해주세요' onChange={handleChangeQuantity} value={quantity} />
         </div>
+
+        <p className={styles.errorMsg}>{modalError}</p>
 
         <div className={styles.buttonWrap}>
           <button type='button' onClick={handleSubmitAddCoin}>

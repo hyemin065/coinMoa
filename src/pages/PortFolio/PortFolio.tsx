@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { coinListState, isLoginState, modalState } from '../../recoil/recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { bookMarkCoinNameState, coinListState, isLoginState, modalState } from '../../recoil/recoil';
 import axios from 'axios';
 import { getCoinOnlyPrice } from '../../services/getCoinApi';
 import { IUserCoinList } from '../../types/coin';
 
-import PortFolioItem from './PortFolioItem/PortFolioItem';
 import Modal from '../../components/Modal/Modal';
 
 import styles from './portFolio.module.scss';
 import { Link } from 'react-router-dom';
+import PortFolioItem from './PortFolioItem/PortFolioItem';
 
 const MARKET_CATE = ['binance', 'upbit', 'bithumb'];
 
@@ -20,7 +20,7 @@ const PortFolio = () => {
   const [isOpenModal, setIsOpenModal] = useRecoilState(modalState);
   const [marketValue, setMarketValue] = useState(false);
   const [isCurrencyAssets, setIsCurrencyAssets] = useState(false);
-
+  const setBookMarkCoinName = useSetRecoilState(bookMarkCoinNameState);
   const isLogin = useRecoilValue(isLoginState);
 
   const list = marketValue ? marketList : userCoinList;
@@ -49,11 +49,15 @@ const PortFolio = () => {
   };
 
   const handleShowMarketCoin = (value: string) => {
-    const ml = userCoinList.filter((item) => {
+    const marketCoins = userCoinList.filter((item) => {
       return item.market === value;
     });
     setMarketValue(true);
-    setMarketCoinList(ml);
+    setMarketCoinList(marketCoins);
+  };
+
+  const handleBookMarkGetName = (name: any) => {
+    setBookMarkCoinName(name);
   };
 
   const getPortFolio = async () => {
@@ -74,10 +78,8 @@ const PortFolio = () => {
         return {
           ...item,
           price,
-          totalAmount:
-            item.currency === 'krw' ? `₩${item.average * item.quantity}` : `$${item.average * item.quantity}`,
-          evaluationAmount:
-            item.currency === 'krw' ? `₩${presentPrice * item.quantity}` : `$${presentPrice * item.quantity}`,
+          totalAmount: item.average * item.quantity,
+          evaluationAmount: presentPrice * item.quantity,
           valuationPL: presentPrice * item.quantity - item.average * item.quantity,
           return: (((presentPrice - item.average) / item.average) * 100).toFixed(2),
         };
@@ -128,7 +130,13 @@ const PortFolio = () => {
             {list.length > 0 ? (
               <>
                 <div className={styles.addBtn}>
-                  <button type='button' onClick={handleOpenModal}>
+                  <button
+                    type='button'
+                    onClick={() => {
+                      handleOpenModal();
+                      handleBookMarkGetName('');
+                    }}
+                  >
                     추가하기
                   </button>
                 </div>

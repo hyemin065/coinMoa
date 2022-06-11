@@ -1,5 +1,3 @@
-import { UrlWithStringQuery } from 'url';
-
 export interface ICoinMarketParams {
   order: string;
   per_page: number;

@@ -124,3 +124,52 @@ export const getPortFolioApi = async () => {
     throw new Error((error as Error).message);
   }
 };
+
+export const addCoinApi = async (
+  uniqueId: string | null,
+  searchValueId: string,
+  marketValue: string,
+  searchValueName: string,
+  searchValueSymbol: string,
+  searchValueThumb: string,
+  selectCurrency: string,
+  transaction: string,
+  date: string,
+  transactionPrice: number,
+  quantity: number
+) => {
+  try {
+    const res = await axios.post('https://coin-moa.herokuapp.com/coin/coinAdd', {
+      userId: uniqueId,
+      apiCallName: searchValueId,
+      market: marketValue,
+      name: searchValueName,
+      symbol: searchValueSymbol,
+      thumb: searchValueThumb,
+      currency: selectCurrency,
+      transaction,
+      date,
+      transactionPrice,
+      average: Number(transactionPrice),
+      quantity,
+      totalAmount: Number(transactionPrice) * quantity,
+    });
+    return res;
+  } catch (error) {
+    throw new Error((error as Error).message);
+  }
+};
+
+export const deleteCoinApi = async (uniqueId: string | null, searchValueId: string, marketValue: string) => {
+  try {
+    const res = await axios.post('https://coin-moa.herokuapp.com/coin/delete', {
+      userId: uniqueId,
+      apiCallName: searchValueId,
+      market: marketValue,
+    });
+    console.log(res);
+    return res;
+  } catch (error) {
+    throw new Error((error as Error).message);
+  }
+};

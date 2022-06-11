@@ -8,7 +8,6 @@
   color: colors.$WHITE;
 
   .titleWrap {
-    @include flexbox.flexbox(between, end);
     margin-bottom: 30px;
 
     h2 {
@@ -27,6 +26,117 @@
       line-height: 20px;
       color: colors.$SUB_TEXT_COLOR;
     }
+  }
+
+  .marketTop {
+    @include flexbox.flexbox(between, center);
+    margin-bottom: 50px;
+
+    > div {
+      position: relative;
+      width: 49%;
+      height: 170px;
+      padding: 15px 25px;
+      background-color: #1e1e1e;
+      border-radius: 6px;
+
+      &:last-child {
+        &::before {
+          background-color: colors.$MINUS;
+        }
+      }
+
+      &::before {
+        @include position.absolute(0 auto auto 0);
+        display: block;
+        width: 8px;
+        height: 100%;
+        content: '';
+        background-color: colors.$PLUS;
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
+      }
+
+      .trendTitle,
+      .dominanceTitle {
+        @include flexbox.flexbox(start, center);
+        margin-bottom: 12px;
+
+        h3 {
+          margin-left: 10px;
+          font-size: 14px;
+        }
+
+        img,
+        svg {
+          width: 24px;
+        }
+      }
+    }
+
+    .trendWrap {
+      ul {
+        margin-left: 10px;
+
+        li {
+          @include flexbox.flexbox(start, center);
+          margin-bottom: 15px;
+
+          span {
+            margin-right: 15px;
+            font-size: 12px;
+            color: #a9a9a9;
+          }
+
+          > div {
+            @include flexbox.flexbox(between, center);
+            width: 96%;
+
+            dl {
+              margin-left: 10px;
+              @include flexbox.flexbox(start, center);
+              font-size: 14px;
+
+              dt {
+                img {
+                  width: 22px;
+                  margin-right: 10px;
+                  vertical-align: middle;
+                }
+              }
+
+              dd {
+                margin-left: 20px;
+                color: colors.$SUB_TEXT_COLOR;
+              }
+            }
+
+            p {
+              font-size: 14px;
+              color: #a9a9a9;
+            }
+          }
+        }
+      }
+    }
+
+    .dominanceWrap {
+      ul {
+        li {
+          dl {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 120px;
+          }
+        }
+      }
+    }
+  }
+
+  .category {
+    margin-bottom: 10px;
+    @include flexbox.flexbox(end, center);
 
     .toggle {
       position: relative;
@@ -136,111 +246,6 @@
 
         &.active {
           color: colors.$MAIN_COLOR;
-        }
-      }
-    }
-  }
-}
-
-.marketTop {
-  @include flexbox.flexbox(between, center);
-
-  > div {
-    position: relative;
-    width: 49%;
-    height: 160px;
-    padding: 15px 25px;
-    background-color: #1e1e1e;
-    border-radius: 6px;
-
-    &:last-child {
-      &::before {
-        background-color: colors.$MINUS;
-      }
-    }
-
-    &::before {
-      @include position.absolute(0 auto auto 0);
-      display: block;
-      width: 8px;
-      height: 100%;
-      content: '';
-      background-color: colors.$PLUS;
-      border-top-left-radius: 6px;
-      border-bottom-left-radius: 6px;
-    }
-
-    .trendTitle,
-    .dominanceTitle {
-      @include flexbox.flexbox(start, center);
-      margin-bottom: 12px;
-
-      h3 {
-        margin-left: 10px;
-        font-size: 14px;
-      }
-
-      img,
-      svg {
-        width: 24px;
-      }
-    }
-  }
-
-  .trendWrap {
-    ul {
-      margin-left: 10px;
-
-      li {
-        @include flexbox.flexbox(start, center);
-        margin-bottom: 10px;
-
-        span {
-          margin-right: 15px;
-          font-size: 12px;
-          color: #a9a9a9;
-        }
-
-        > div {
-          @include flexbox.flexbox(between, center);
-          width: 96%;
-
-          dl {
-            margin-left: 10px;
-            @include flexbox.flexbox(start, center);
-            font-size: 14px;
-
-            dt {
-              img {
-                width: 22px;
-                margin-right: 10px;
-                vertical-align: middle;
-              }
-            }
-
-            dd {
-              margin-left: 40px;
-              color: colors.$SUB_TEXT_COLOR;
-            }
-          }
-
-          p {
-            font-size: 14px;
-            color: #a9a9a9;
-          }
-        }
-      }
-    }
-  }
-
-  .dominanceWrap {
-    ul {
-      li {
-        dl {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          width: 120px;
         }
       }
     }

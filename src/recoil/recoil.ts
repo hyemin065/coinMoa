@@ -25,3 +25,8 @@ export const coinListState = atom<IUserCoinList[]>({
   key: 'coinListState',
   default: [],
 });
+
+export const bookMarkCoinNameState = atom<string>({
+  key: 'bookMarkCoinNameState',
+  default: '',
+});
