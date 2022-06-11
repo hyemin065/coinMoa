@@ -34,11 +34,17 @@
 
     > div {
       position: relative;
-      width: 49%;
+      width: 32%;
       height: 170px;
       padding: 15px 25px;
       background-color: #1e1e1e;
       border-radius: 6px;
+
+      &:nth-child(2) {
+        &::before {
+          background-color: #fe9601;
+        }
+      }
 
       &:last-child {
         &::before {
@@ -93,22 +99,7 @@
             width: 96%;
 
             dl {
-              margin-left: 10px;
               @include flexbox.flexbox(start, center);
-              font-size: 14px;
-
-              dt {
-                img {
-                  width: 22px;
-                  margin-right: 10px;
-                  vertical-align: middle;
-                }
-              }
-
-              dd {
-                margin-left: 20px;
-                color: colors.$SUB_TEXT_COLOR;
-              }
             }
 
             p {
@@ -123,13 +114,60 @@
     .dominanceWrap {
       ul {
         li {
+          margin-bottom: 12px;
+          font-size: 14px;
+          @include flexbox.flexbox(between, center);
+
           dl {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            @include flexbox.flexbox(between, center);
             width: 120px;
           }
+
+          p {
+            &.plus {
+              color: colors.$PLUS;
+            }
+
+            &.minus {
+              color: colors.$MINUS;
+            }
+          }
         }
+      }
+    }
+
+    .markeCapWrap {
+      ul {
+        margin-top: 20px;
+
+        li {
+          margin-bottom: 10px;
+
+          dl {
+            @include flexbox.flexbox(between, center);
+          }
+        }
+      }
+    }
+
+    dl {
+      margin-left: 10px;
+      @include flexbox.flexbox(between, center);
+      font-size: 14px;
+
+      dt {
+        letter-spacing: 0;
+
+        img {
+          width: 22px;
+          margin-right: 10px;
+          vertical-align: middle;
+        }
+      }
+
+      dd {
+        margin-left: 20px;
+        color: colors.$SUB_TEXT_COLOR;
       }
     }
   }

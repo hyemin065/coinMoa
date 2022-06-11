@@ -2,9 +2,8 @@ import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { bookMarkCoinNameState, coinListState, dateState, modalState } from '../../recoil/recoil';
-import axios from 'axios';
 
-import { addCoinApi, getCoinSearchApi } from '../../services/getCoinApi';
+import { addCoinApi, deleteCoinApi, getCoinSearchApi, updateCoinApi } from '../../services/getCoinApi';
 import { ISearchCoin, IUserCoinList } from '../../types/coin';
 import DateCalendar from '../DatePicker/DateCalendar';
 import Radio from '../Radio/Radio';
@@ -131,51 +130,27 @@ const Modal = () => {
     const portFolioCoin = userCoinList.filter((item) => {
       return item.market === marketValue && item.apiCallName === searchValueId;
     });
-    console.log(portFolioCoin);
-    if (portFolioCoin.length > 0) {
-      try {
-        await axios.post('https://coin-moa.herokuapp.com/coin/update', {
-          userId: uniqueId,
-          apiCallName: searchValueId,
-          market: marketValue,
-          name: searchValueName,
-          symbol: searchValueSymbol,
-          thumb: searchValueThumb,
-          currency: selectCurrency,
-          date,
-          transaction,
-          transactionPrice,
-          average:
-            transaction === 'buy'
-              ? portFolioCoin[0].average + Number(transactionPrice)
-              : portFolioCoin[0].average - Number(transactionPrice),
-          quantity:
-            transaction === 'buy'
-              ? portFolioCoin[0].quantity + Number(quantity)
-              : portFolioCoin[0].quantity - Number(quantity),
-          totalAmount:
-            transaction === 'buy'
-              ? portFolioCoin[0].totalAmount + Number(transactionPrice) * Number(quantity)
-              : portFolioCoin[0].totalAmount - Number(transactionPrice) * Number(quantity),
-        });
 
-        window.location.reload();
-        setIsOpenModal(false);
-      } catch (error) {
-        throw new Error((error as Error).message);
-      }
+    if (portFolioCoin.length > 0) {
+      await updateCoinApi(
+        portFolioCoin,
+        uniqueId,
+        searchValueId,
+        marketValue,
+        searchValueName,
+        searchValueSymbol,
+        searchValueThumb,
+        selectCurrency,
+        date,
+        transaction,
+        transactionPrice,
+        quantity
+      );
+      window.location.reload();
+      setIsOpenModal(false);
 
       if (transaction === 'sell' && portFolioCoin[0].quantity - quantity <= 0) {
-        try {
-          await axios.post('https://coin-moa.herokuapp.com/coin/delete', {
-            userId: uniqueId,
-            apiCallName: searchValueId,
-            market: marketValue,
-          });
-          window.location.reload();
-        } catch (error) {
-          throw new Error((error as Error).message);
-        }
+        await deleteCoinApi(uniqueId, searchValueId, marketValue);
       }
     }
     if (portFolioCoin.length === 0 && transaction === 'buy') {

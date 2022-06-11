@@ -139,7 +139,7 @@ export const addCoinApi = async (
   quantity: number
 ) => {
   try {
-    const res = await axios.post('https://coin-moa.herokuapp.com/coin/coinAdd', {
+    await axios.post('https://coin-moa.herokuapp.com/coin/coinAdd', {
       userId: uniqueId,
       apiCallName: searchValueId,
       market: marketValue,
@@ -154,7 +154,7 @@ export const addCoinApi = async (
       quantity,
       totalAmount: Number(transactionPrice) * quantity,
     });
-    return res;
+    return;
   } catch (error) {
     throw new Error((error as Error).message);
   }
@@ -162,13 +162,57 @@ export const addCoinApi = async (
 
 export const deleteCoinApi = async (uniqueId: string | null, searchValueId: string, marketValue: string) => {
   try {
-    const res = await axios.post('https://coin-moa.herokuapp.com/coin/delete', {
+    await axios.post('https://coin-moa.herokuapp.com/coin/delete', {
       userId: uniqueId,
       apiCallName: searchValueId,
       market: marketValue,
     });
-    console.log(res);
-    return res;
+    return;
+  } catch (error) {
+    throw new Error((error as Error).message);
+  }
+};
+
+export const updateCoinApi = async (
+  portFolioCoin: IUserCoinList[],
+  uniqueId: string | null,
+  searchValueId: string,
+  marketValue: string,
+  searchValueName: string,
+  searchValueSymbol: string,
+  searchValueThumb: string,
+  selectCurrency: string,
+  date: string,
+  transaction: string,
+  transactionPrice: number,
+  quantity: number
+) => {
+  try {
+    await axios.post('https://coin-moa.herokuapp.com/coin/update', {
+      userId: uniqueId,
+      apiCallName: searchValueId,
+      market: marketValue,
+      name: searchValueName,
+      symbol: searchValueSymbol,
+      thumb: searchValueThumb,
+      currency: selectCurrency,
+      date,
+      transaction,
+      transactionPrice,
+      average:
+        transaction === 'buy'
+          ? portFolioCoin[0].average + Number(transactionPrice)
+          : portFolioCoin[0].average - Number(transactionPrice),
+      quantity:
+        transaction === 'buy'
+          ? portFolioCoin[0].quantity + Number(quantity)
+          : portFolioCoin[0].quantity - Number(quantity),
+      totalAmount:
+        transaction === 'buy'
+          ? portFolioCoin[0].totalAmount + Number(transactionPrice) * Number(quantity)
+          : portFolioCoin[0].totalAmount - Number(transactionPrice) * Number(quantity),
+    });
+    return;
   } catch (error) {
     throw new Error((error as Error).message);
   }
