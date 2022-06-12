@@ -139,65 +139,69 @@ const Market = () => {
           </ul>
         </div>
 
-        <div className={styles.dominanceWrap}>
-          <div className={styles.title}>
-            <img src={upDownIcon} alt='dominance' />
-            <h3>도미넌스</h3>
-          </div>
-          <ul>
-            <li>
-              <dl>
-                <dt>BTC.D</dt>
-                <dd>{`${dominance.btc_dominance.toFixed(2)}%`}</dd>
-              </dl>
-              <p
-                className={dominance.btc_dominance_24h_percentage_change > 0 ? `${styles.plus}` : `${styles.minus}`}
-              >{`${dominance.btc_dominance_24h_percentage_change.toFixed(2)}%`}</p>
-            </li>
-            <li>
-              <dl>
-                <dt>ETH.D</dt>
-                <dd>{`${dominance.eth_dominance.toFixed(2)}%`}</dd>
-              </dl>
-              <p
-                className={dominance.eth_dominance_24h_percentage_change > 0 ? `${styles.plus}` : `${styles.minus}`}
-              >{`${dominance.eth_dominance_24h_percentage_change.toFixed(2)}%`}</p>
-            </li>
-          </ul>
-        </div>
+        {dominance && (
+          <>
+            <div className={styles.dominanceWrap}>
+              <div className={styles.title}>
+                <img src={upDownIcon} alt='dominance' />
+                <h3>도미넌스</h3>
+              </div>
+              <ul>
+                <li>
+                  <dl>
+                    <dt>BTC.D</dt>
+                    <dd>{`${dominance.btc_dominance.toFixed(2)}%`}</dd>
+                  </dl>
+                  <p
+                    className={dominance.btc_dominance_24h_percentage_change > 0 ? `${styles.plus}` : `${styles.minus}`}
+                  >{`${dominance.btc_dominance_24h_percentage_change.toFixed(2)}%`}</p>
+                </li>
+                <li>
+                  <dl>
+                    <dt>ETH.D</dt>
+                    <dd>{`${dominance.eth_dominance.toFixed(2)}%`}</dd>
+                  </dl>
+                  <p
+                    className={dominance.eth_dominance_24h_percentage_change > 0 ? `${styles.plus}` : `${styles.minus}`}
+                  >{`${dominance.eth_dominance_24h_percentage_change.toFixed(2)}%`}</p>
+                </li>
+              </ul>
+            </div>
 
-        <div className={styles.markeCapWrap}>
-          <div className={styles.title}>
-            <MarketCapIcon />
-            <h3>카테고리별 시가총액</h3>
-          </div>
-          <ul>
-            <li>
-              <dl>
-                <dt>Defi Volume (24h)</dt>
-                <dd>{unitComma(true, `${dominance.defi_volume_24h.toFixed(2)}`)}</dd>
-              </dl>
-            </li>
-            <li>
-              <dl>
-                <dt>Defi MarketCap</dt>
-                <dd>{unitComma(true, `${dominance.defi_market_cap.toFixed(2)}`)}</dd>
-              </dl>
-            </li>
-            <li>
-              <dl>
-                <dt>Stablecoin Volume(24h)</dt>
-                <dd>{unitComma(true, `${dominance.stablecoin_volume_24h.toFixed(2)}`)}</dd>
-              </dl>
-            </li>
-            <li>
-              <dl>
-                <dt>Stablecoin MarketCap</dt>
-                <dd>{unitComma(true, `${dominance.stablecoin_market_cap.toFixed(2)}`)}</dd>
-              </dl>
-            </li>
-          </ul>
-        </div>
+            <div className={styles.markeCapWrap}>
+              <div className={styles.title}>
+                <MarketCapIcon />
+                <h3>카테고리별 시가총액</h3>
+              </div>
+              <ul>
+                <li>
+                  <dl>
+                    <dt>Defi Volume (24h)</dt>
+                    <dd>{unitComma(true, `${dominance.defi_volume_24h.toFixed(2)}`)}</dd>
+                  </dl>
+                </li>
+                <li>
+                  <dl>
+                    <dt>Defi MarketCap</dt>
+                    <dd>{unitComma(true, `${dominance.defi_market_cap.toFixed(2)}`)}</dd>
+                  </dl>
+                </li>
+                <li>
+                  <dl>
+                    <dt>Stablecoin Volume(24h)</dt>
+                    <dd>{unitComma(true, `${dominance.stablecoin_volume_24h.toFixed(2)}`)}</dd>
+                  </dl>
+                </li>
+                <li>
+                  <dl>
+                    <dt>Stablecoin MarketCap</dt>
+                    <dd>{unitComma(true, `${dominance.stablecoin_market_cap.toFixed(2)}`)}</dd>
+                  </dl>
+                </li>
+              </ul>
+            </div>
+          </>
+        )}
       </section>
 
       <ToggleButton />
