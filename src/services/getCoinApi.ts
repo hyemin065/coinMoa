@@ -10,6 +10,8 @@ import {
 import axios from 'axios';
 
 const COINGECKO_BASE_URL = 'https://api.coingecko.com/api/v3';
+const DOMINANCE_BASE_URL = '/v1/global-metrics/quotes/latest';
+const PROXY = window.location.hostname === 'localhost' ? DOMINANCE_BASE_URL : '/proxy';
 
 export const getCoinMarketApi = async (params: ICoinMarketParams) => {
   try {
@@ -79,7 +81,7 @@ export const getTrendingCoin = async () => {
 
 export const getDominanceApi = async () => {
   try {
-    const res = await axios.get(`/v1/global-metrics/quotes/latest`, {
+    const res = await axios.get(`${PROXY}`, {
       headers: {
         'X-CMC_PRO_API_KEY': `${process.env.REACT_APP_API_KEY}`,
         'Content-Type': 'application/json',
