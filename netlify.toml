@@ -1,5 +1,4 @@
 [[redirects]]
-/api/*  https://pro-api.coinmarketcap.com/:splat  200
 from = "/proxy"
   to = "https://pro-api.coinmarketcap.com"
   status = 200
