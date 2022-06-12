@@ -1,5 +1,5 @@
 [[redirects]]
 from = "/proxy/*"
-  to = "https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest"  
+  to = "http://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest"  
   status = 200
   force = true
