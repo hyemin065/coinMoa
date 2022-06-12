@@ -25,3 +25,15 @@ export const signInApi = async (params: IUser) => {
     throw new Error((error as Error).message);
   }
 };
+
+export const userCheckIdApi = async (id: string) => {
+  try {
+    const res = await axios.post('https://coin-moa.herokuapp.com/users/ischeckId', {
+      userId: id,
+    });
+    const { data } = res;
+    return data;
+  } catch (error) {
+    throw new Error((error as Error).message);
+  }
+};

@@ -1,8 +1,7 @@
-import axios from 'axios';
 import { ChangeEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { signUpApi } from '../../services/getUserApi';
+import { signUpApi, userCheckIdApi } from '../../services/getUserApi';
 import SignInput from '../../components/SignInput/SignInput';
 
 import styles from './signUp.module.scss';
@@ -41,17 +40,13 @@ const SignUp = () => {
 
   const handleisCheckId = async () => {
     if (id !== '') {
-      try {
-        const res = await axios.post('https://coin-moa.herokuapp.com/users/ischeckId', {
-          userId: id,
-        });
-        const { data } = res;
-        if (data.success) {
-          setIdCheckMsg('사용가능한 아이디입니다.');
-          setIdDuplicateCheck(true);
-        }
-      } catch (error) {
-        setIdCheckMsg('중복된 아이디가 있습니다');
+      const data = await userCheckIdApi(id);
+
+      if (data.success) {
+        setIdCheckMsg('사용가능한 아이디입니다.');
+        setIdDuplicateCheck(true);
+      } else {
+        setIdCheckMsg(data.message);
         setIdDuplicateCheck(false);
       }
     } else {
