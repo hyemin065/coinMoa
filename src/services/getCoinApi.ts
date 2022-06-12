@@ -1,4 +1,5 @@
 import {
+  ICoin,
   IUserCoinList,
   IExchangeParams,
   ICoinMarketParams,
@@ -112,6 +113,7 @@ export const getPortFolioApi = async () => {
         ...item,
         price,
         totalAmount: item.average * item.quantity,
+        average: item.average,
         evaluationAmount: presentPrice * item.quantity,
         valuationPL: presentPrice * item.quantity - item.average * item.quantity,
         return: (((presentPrice - item.average) / item.average) * 100).toFixed(2),
@@ -124,34 +126,22 @@ export const getPortFolioApi = async () => {
   }
 };
 
-export const addCoinApi = async (
-  uniqueId: string | null,
-  searchValueId: string,
-  marketValue: string,
-  searchValueName: string,
-  searchValueSymbol: string,
-  searchValueThumb: string,
-  selectCurrency: string,
-  transaction: string,
-  date: string,
-  transactionPrice: number,
-  quantity: number
-) => {
+export const addCoinApi = async (prarms: ICoin) => {
   try {
     await axios.post('https://coin-moa.herokuapp.com/coin/coinAdd', {
-      userId: uniqueId,
-      apiCallName: searchValueId,
-      market: marketValue,
-      name: searchValueName,
-      symbol: searchValueSymbol,
-      thumb: searchValueThumb,
-      currency: selectCurrency,
-      transaction,
-      date,
-      transactionPrice,
-      average: Number(transactionPrice),
-      quantity,
-      totalAmount: Number(transactionPrice) * quantity,
+      userId: prarms.uniqueId,
+      apiCallName: prarms.searchValueId,
+      market: prarms.marketValue,
+      name: prarms.searchValueName,
+      symbol: prarms.searchValueSymbol,
+      thumb: prarms.searchValueThumb,
+      currency: prarms.selectCurrency,
+      transaction: prarms.transaction,
+      date: prarms.date,
+      transactionPrice: prarms.transactionPrice,
+      average: Number(prarms.transactionPrice),
+      quantity: prarms.quantity,
+      totalAmount: Number(prarms.transactionPrice) * prarms.quantity,
     });
 
     return;
@@ -173,45 +163,32 @@ export const deleteCoinApi = async (uniqueId: string | null, searchValueId: stri
   }
 };
 
-export const updateCoinApi = async (
-  portFolioCoin: IUserCoinList[],
-  uniqueId: string | null,
-  searchValueId: string,
-  marketValue: string,
-  searchValueName: string,
-  searchValueSymbol: string,
-  searchValueThumb: string,
-  selectCurrency: string,
-  date: string,
-  transaction: string,
-  transactionPrice: number,
-  quantity: number
-) => {
+export const updateCoinApi = async (prarms: ICoin) => {
   try {
     await axios.post('https://coin-moa.herokuapp.com/coin/update', {
-      userId: uniqueId,
-      apiCallName: searchValueId,
-      market: marketValue,
-      name: searchValueName,
-      symbol: searchValueSymbol,
-      thumb: searchValueThumb,
-      currency: selectCurrency,
-      date,
-      transaction,
-      transactionPrice,
+      userId: prarms.uniqueId,
+      apiCallName: prarms.searchValueId,
+      market: prarms.marketValue,
+      name: prarms.searchValueName,
+      symbol: prarms.searchValueSymbol,
+      thumb: prarms.searchValueThumb,
+      currency: prarms.selectCurrency,
+      date: prarms.date,
+      transaction: prarms.transaction,
+      transactionPrice: prarms.transactionPrice,
       average:
-        transaction === 'buy'
-          ? (portFolioCoin[0].totalAmount + Number(transactionPrice) * quantity) /
-            (portFolioCoin[0].quantity + quantity)
-          : portFolioCoin[0].average,
+        prarms.transaction === 'buy'
+          ? (prarms.portFolioCoin[0].totalAmount + Number(prarms.transactionPrice) * prarms.quantity) /
+            (prarms.portFolioCoin[0].quantity + prarms.quantity)
+          : prarms.portFolioCoin[0].average,
       quantity:
-        transaction === 'buy'
-          ? portFolioCoin[0].quantity + Number(quantity)
-          : portFolioCoin[0].quantity - Number(quantity),
+        prarms.transaction === 'buy'
+          ? prarms.portFolioCoin[0].quantity + Number(prarms.quantity)
+          : prarms.portFolioCoin[0].quantity - Number(prarms.quantity),
       totalAmount:
-        transaction === 'buy'
-          ? portFolioCoin[0].totalAmount + Number(transactionPrice) * Number(quantity)
-          : portFolioCoin[0].totalAmount - Number(transactionPrice) * Number(quantity),
+        prarms.transaction === 'buy'
+          ? prarms.portFolioCoin[0].totalAmount + Number(prarms.transactionPrice) * Number(prarms.quantity)
+          : prarms.portFolioCoin[0].totalAmount - Number(prarms.transactionPrice) * Number(prarms.quantity),
     });
 
     return;

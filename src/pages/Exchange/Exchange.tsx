@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
-import ScrollTopButton from '../../components/ScrollTopButton/ScrollTopButton';
+
 import { getExchange } from '../../services/getCoinApi';
 import { IExchange } from '../../types/coin';
 import { useUnitCommaData } from '../../utils/useUnitCommaData';
+import ScrollTopButton from '../../components/ScrollTopButton/ScrollTopButton';
+
 import styles from './exchange.module.scss';
 
 const PAGINATION = [1, 2, 3];
@@ -20,6 +22,7 @@ const Exchange = () => {
 
   useEffect(() => {
     getExchangeApi();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   const handleClickPage = (item: number) => {

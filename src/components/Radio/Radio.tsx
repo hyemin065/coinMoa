@@ -4,10 +4,10 @@ import styles from './radio.module.scss';
 interface IProps {
   label: string;
   id: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   checked: boolean;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
-const Radio = ({ label, id, onChange, checked }: IProps) => {
+const Radio = ({ label, id, checked, onChange }: IProps) => {
   return (
     <label htmlFor={id} className={styles.radioLabel}>
       {label}

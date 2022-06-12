@@ -109,3 +109,18 @@ export interface IDominance {
   derivatives_volume_24h: number;
   derivatives_24h_percentage_change: number;
 }
+
+export interface ICoin {
+  portFolioCoin: IUserCoinList[];
+  uniqueId: string | null;
+  searchValueId: string;
+  marketValue: string;
+  searchValueName: string;
+  searchValueSymbol: string;
+  searchValueThumb: string;
+  selectCurrency: string;
+  date: string;
+  transaction: string;
+  transactionPrice: number;
+  quantity: number;
+}

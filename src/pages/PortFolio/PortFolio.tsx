@@ -1,54 +1,39 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { bookMarkCoinNameState, coinListState, isLoginState, modalState } from '../../recoil/recoil';
-import axios from 'axios';
-import { getCoinOnlyPrice } from '../../services/getCoinApi';
-import { IUserCoinList } from '../../types/coin';
 
+import { bookMarkCoinNameState, coinListState, currencyState, isLoginState, modalState } from '../../recoil/recoil';
+import { getPortFolioApi } from '../../services/getCoinApi';
+import { IUserCoinList } from '../../types/coin';
+import { useUnitCommaData } from '../../utils/useUnitCommaData';
 import Modal from '../../components/Modal/Modal';
+import ToggleButton from '../../components/Toggle/ToggleButton';
+import PortFolioItem from './PortFolioItem/PortFolioItem';
 
 import styles from './portFolio.module.scss';
-import { Link } from 'react-router-dom';
-import PortFolioItem from './PortFolioItem/PortFolioItem';
-import { useUnitCommaData } from '../../utils/useUnitCommaData';
 
 const MARKET_CATE = ['binance', 'upbit', 'bithumb'];
+const CURRENCY_CATE = ['krw', 'usd'];
 
 const PortFolio = () => {
-  const uniqueId = localStorage.getItem('id');
   const [userCoinList, setUserCoinList] = useRecoilState<IUserCoinList[]>(coinListState);
+  const setBookMarkCoinName = useSetRecoilState(bookMarkCoinNameState);
+  const iscurrency = useRecoilValue(currencyState);
+  const isLogin = useRecoilValue(isLoginState);
+
   const [marketList, setMarketCoinList] = useState<IUserCoinList[]>([]);
   const [isOpenModal, setIsOpenModal] = useRecoilState(modalState);
   const [marketValue, setMarketValue] = useState(false);
-  const [isCurrencyAssets, setIsCurrencyAssets] = useState(false);
-  const setBookMarkCoinName = useSetRecoilState(bookMarkCoinNameState);
-  const isLogin = useRecoilValue(isLoginState);
 
-  const list = marketValue ? marketList : userCoinList;
-  // console.log(list);
   const unitComma = useUnitCommaData;
-
-  const krwValuationPL = userCoinList.filter((item: IUserCoinList) => {
-    return item.currency === 'krw';
-  });
-  const usdValuationPL = userCoinList.filter((item: IUserCoinList) => {
-    return item.currency === 'usd';
-  });
-
-  const totalAssetsKRW = krwValuationPL.reduce((acc: number, cur: IUserCoinList) => {
-    return acc + cur.evaluationAmount;
-  }, 0);
-
-  const totalAssetsUSD = usdValuationPL.reduce((acc: number, cur: IUserCoinList) => {
-    return acc + cur.evaluationAmount;
-  }, 0);
-
-  const handleChangeCurrent = () => {
-    setIsCurrencyAssets((prev) => !prev);
-  };
+  const list = marketValue ? marketList : userCoinList;
 
   const handleOpenModal = () => {
     setIsOpenModal(true);
+  };
+
+  const handleBookMarkGetName = (name: any) => {
+    setBookMarkCoinName(name);
   };
 
   const handleShowMarketCoin = (value: string) => {
@@ -59,41 +44,9 @@ const PortFolio = () => {
     setMarketCoinList(marketCoins);
   };
 
-  const handleBookMarkGetName = (name: any) => {
-    setBookMarkCoinName(name);
-  };
-
   const getPortFolio = async () => {
-    try {
-      const res = await axios.get(`https://coin-moa.herokuapp.com/coin/getCoin/${uniqueId}`);
-      const { coin } = res.data;
-      const coinName = coin.map((item: IUserCoinList) => item.apiCallName).join(',');
-
-      const coinPrice = await getCoinOnlyPrice({
-        ids: coinName,
-        vs_currencies: 'krw,usd',
-      });
-
-      const coinList = coin.map((item: IUserCoinList) => {
-        const name = item.apiCallName;
-        const price = coinPrice[name];
-        const presentPrice = price[item.currency];
-
-        return {
-          ...item,
-          price,
-          totalAmount: item.average * item.quantity,
-          average: item.average,
-          evaluationAmount: presentPrice * item.quantity,
-          valuationPL: presentPrice * item.quantity - item.average * item.quantity,
-          return: (((presentPrice - item.average) / item.average) * 100).toFixed(2),
-        };
-      });
-
-      setUserCoinList(coinList);
-    } catch (error) {
-      throw new Error((error as Error).message);
-    }
+    const data = await getPortFolioApi();
+    setUserCoinList(data);
   };
 
   useEffect(() => {
@@ -101,10 +54,27 @@ const PortFolio = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const getCurrencyAssets = (value: string) => {
+    const currencyItem = userCoinList.filter((item) => item.currency === value);
+
+    const assetsItem = currencyItem.reduce((acc, cur) => {
+      const currencyAssets = {
+        krw: acc + cur.evaluationAmount,
+        usd: acc + cur.evaluationAmount,
+      }[value];
+      if (!currencyAssets) return 0;
+      return currencyAssets;
+    }, 0);
+
+    return assetsItem;
+  };
+
+  const totalAssets = CURRENCY_CATE.map((item) => getCurrencyAssets(item));
+
   const handleGetMarketAssets = (marketVal: string) => {
     const market = userCoinList.filter((item) => item.market === marketVal);
 
-    const totalAssets = market.reduce((acc, cur) => {
+    const marketTotalAssets = market.reduce((acc, cur) => {
       const marketAssets = {
         binance: acc + cur.evaluationAmount,
         upbit: acc + cur.evaluationAmount,
@@ -114,27 +84,24 @@ const PortFolio = () => {
       return marketAssets;
     }, 0);
     return marketVal === 'binance'
-      ? `${unitComma(false, totalAssets.toFixed(2))}`
-      : `${unitComma(true, totalAssets.toFixed(2))}`;
+      ? `${unitComma(false, marketTotalAssets.toFixed(2))}`
+      : `${unitComma(true, marketTotalAssets.toFixed(2))}`;
   };
 
   return (
     <div className={styles.container}>
       {isLogin ? (
         <>
-          <ul>
+          <ul className={styles.assetsWrap}>
             <li>
               <button type='button' onClick={() => setMarketValue(false)}>
                 <h3>총자산</h3>
-                <p>{unitComma(isCurrencyAssets, isCurrencyAssets ? `${totalAssetsUSD}` : `${totalAssetsKRW}`)}</p>
+                <p>
+                  {unitComma(iscurrency, iscurrency ? `${totalAssets[1].toFixed(2)}` : `${totalAssets[0].toFixed(2)}`)}
+                </p>
               </button>
               <div className={styles.toggle}>
-                <button
-                  className={isCurrencyAssets ? `${styles.currentUSD}` : ''}
-                  type='button'
-                  onClick={handleChangeCurrent}
-                  aria-label='toggle current'
-                />
+                <ToggleButton />
               </div>
             </li>
 
@@ -144,7 +111,7 @@ const PortFolio = () => {
                   <button type='button' onClick={() => handleShowMarketCoin(item)}>
                     <span className={styles.marketName}>{item}</span>
                     <h3>{item} 자산</h3>
-                    <p>{handleGetMarketAssets(item)} </p>
+                    <p>{handleGetMarketAssets(item)}</p>
                   </button>
                   <div />
                 </li>

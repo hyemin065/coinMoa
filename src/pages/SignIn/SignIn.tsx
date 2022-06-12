@@ -7,6 +7,7 @@ import axios from 'axios';
 import SignInput from '../../components/SignInput/SignInput';
 
 import styles from './signIn.module.scss';
+import { signInApi } from '../../services/getUserApi';
 
 const SignIn = () => {
   const [id, setId] = useState('');
@@ -43,24 +44,18 @@ const SignIn = () => {
     }
 
     if (id !== '' && password !== '') {
-      try {
-        const res = await axios.post('https://coin-moa.herokuapp.com/users/signin', {
-          userId: id,
-          userPassword: password,
-        });
-
-        const { data } = res;
-        const { _id: uniqueId } = data.user[0];
-
-        if (data.success) {
-          navigate('/');
-          localStorage.setItem('userId', data.user[0].userId);
-          localStorage.setItem('id', uniqueId);
-          isSetLogin(true);
-        }
-      } catch (error) {
+      const data = await signInApi({
+        userId: id,
+        userPassword: password,
+      });
+      const { _id: uniqueId } = data.user[0];
+      if (data.success) {
+        navigate('/');
+        localStorage.setItem('userId', data.user[0].userId);
+        localStorage.setItem('id', uniqueId);
+        isSetLogin(true);
+      } else {
         setloginFail('로그인 실패');
-        throw new Error((error as Error).message);
       }
     }
   };

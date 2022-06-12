@@ -1,10 +1,12 @@
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { cx } from '../../styles';
-import styles from './header.module.scss';
-import logo from '../../assets/coinmoa.png';
-import { useRecoilState } from 'recoil';
-import { isLoginState } from '../../recoil/recoil';
 import { useEffect } from 'react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+
+import { isLoginState } from '../../recoil/recoil';
+
+import { cx } from '../../styles';
+import logo from '../../assets/coinmoa.png';
+import styles from './header.module.scss';
 
 const Header = () => {
   const uniqueId = localStorage.getItem('id');
@@ -28,7 +30,7 @@ const Header = () => {
 
   return (
     <header className={styles.header}>
-      <div className={styles.headerContainer}>
+      <div className={styles.container}>
         <Link to='/' className={styles.logo}>
           <img src={logo} alt='logo' />
           <h1>COINMOA</h1>

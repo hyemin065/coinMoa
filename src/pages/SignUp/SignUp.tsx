@@ -3,6 +3,7 @@ import { ChangeEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import SignInput from '../../components/SignInput/SignInput';
+import { signUpApi } from '../../services/getUserApi';
 
 import styles from './signUp.module.scss';
 
@@ -81,18 +82,14 @@ const SignUp = () => {
     }
 
     if (idDuplicateCheck && password.length >= 8 && passwordConfirm === password) {
-      try {
-        await axios.post('https://coin-moa.herokuapp.com/users/signup', {
-          userId: id,
-          userPassword: password,
-        });
-        setId('');
-        setPassword('');
-        setPasswordConfirm('');
-        setSignUpSuccess(true);
-      } catch (error) {
-        throw new Error((error as Error).message);
-      }
+      await signUpApi({
+        userId: id,
+        userPassword: password,
+      });
+      setId('');
+      setPassword('');
+      setPasswordConfirm('');
+      setSignUpSuccess(true);
     }
   };
 

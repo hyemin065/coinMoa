@@ -1,26 +1,29 @@
 import { useEffect, useState } from 'react';
 
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { bookMarkCoinNameState, coinListState, currencyState, modalState } from '../../recoil/recoil';
 import { getCoinMarketApi, getDominanceApi, getPortFolioApi, getTrendingCoin } from '../../services/getCoinApi';
 import { IDominance, IMarketCoin, ITrendCoinArray, IUserCoinList } from '../../types/coin';
-import MarketItem from './MarketItem/MarketItem';
-
 import ScrollTopButton from '../../components/ScrollTopButton/ScrollTopButton';
-import TrendingIcon from '../../assets/trendingIcon.png';
-import { DominanceIcon } from '../../assets';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { bookMarkCoinNameState, coinListState, modalState } from '../../recoil/recoil';
 import Modal from '../../components/Modal/Modal';
+import MarketItem from './MarketItem/MarketItem';
 import { useUnitCommaData } from '../../utils/useUnitCommaData';
+
+import { MarketCapIcon } from '../../assets';
+import TrendingIcon from '../../assets/trendingIcon.png';
+import upDownIcon from '../../assets/upDownIcon.png';
 import styles from './market.module.scss';
+import ToggleButton from '../../components/Toggle/ToggleButton';
 
 const PAGINATION = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const Market = () => {
   const [isOpenModal, setIsOpenModal] = useRecoilState(modalState);
   const setBookMarkCoin = useSetRecoilState<IUserCoinList[]>(coinListState);
+  const setBookMarkCoinName = useSetRecoilState(bookMarkCoinNameState);
+  const iscurrency = useRecoilValue(currencyState);
 
   const [coinList, setCoinList] = useState<IMarketCoin[]>([]);
-  const [iscurrency, setIsCurrent] = useState(false);
   const [trendCoin, setTrendCoin] = useState<ITrendCoinArray[]>([]);
   const [dominance, setDominance] = useState<IDominance>({
     eth_dominance: 0,
@@ -40,25 +43,10 @@ const Market = () => {
 
   const currentText = iscurrency ? 'USD' : 'KRW';
 
-  const setBookMarkCoinName = useSetRecoilState(bookMarkCoinNameState);
-
-  const handleChangeCurrent = () => {
-    setIsCurrent((prev) => !prev);
-  };
+  const unitComma = useUnitCommaData;
 
   const handleClickPage = (item: number) => {
     setPage(item);
-  };
-
-  const getApiData = async () => {
-    const res = await getCoinMarketApi({
-      order: 'market_cap_des',
-      per_page: 100,
-      page,
-      sparkline: false,
-      vs_currency: iscurrency ? 'usd' : 'krw',
-    });
-    setCoinList(res);
   };
 
   const handlePublicRank = async () => {
@@ -72,16 +60,6 @@ const Market = () => {
     setDominance(res);
   };
 
-  useEffect(() => {
-    getApiData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, iscurrency]);
-
-  useEffect(() => {
-    handlePublicRank();
-    getDominance();
-  }, []);
-
   const handleOpenModal = () => {
     setIsOpenModal(true);
   };
@@ -90,16 +68,34 @@ const Market = () => {
     setBookMarkCoinName(name);
   };
 
+  const getApiData = async () => {
+    const res = await getCoinMarketApi({
+      order: 'market_cap_des',
+      per_page: 100,
+      page,
+      sparkline: false,
+      vs_currency: iscurrency ? 'usd' : 'krw',
+    });
+    setCoinList(res);
+  };
+
   const getPortFolio = async () => {
     const data = await getPortFolioApi();
     setBookMarkCoin(data);
   };
 
   useEffect(() => {
+    getApiData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, iscurrency]);
+
+  useEffect(() => {
+    handlePublicRank();
     getPortFolio();
+    getDominance();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const unitComma = useUnitCommaData;
   return (
     <div className={styles.container}>
       <ScrollTopButton />
@@ -118,7 +114,7 @@ const Market = () => {
 
       <section className={styles.marketTop}>
         <div className={styles.trendWrap}>
-          <div className={styles.trendTitle}>
+          <div className={styles.title}>
             <img src={TrendingIcon} alt='trendIcon' />
             <h3>실시간 인기 코인 순위</h3>
           </div>
@@ -135,7 +131,7 @@ const Market = () => {
                       </dt>
                       <dd>{item.item.symbol}</dd>
                     </dl>
-                    <p>Rank.{item.item.market_cap_rank}</p>
+                    <p>#.{item.item.market_cap_rank}</p>
                   </div>
                 </li>
               );
@@ -144,8 +140,8 @@ const Market = () => {
         </div>
 
         <div className={styles.dominanceWrap}>
-          <div className={styles.dominanceTitle}>
-            <DominanceIcon />
+          <div className={styles.title}>
+            <img src={upDownIcon} alt='dominance' />
             <h3>도미넌스</h3>
           </div>
           <ul>
@@ -171,8 +167,8 @@ const Market = () => {
         </div>
 
         <div className={styles.markeCapWrap}>
-          <div className={styles.trendTitle}>
-            <img src={TrendingIcon} alt='trendIcon' />
+          <div className={styles.title}>
+            <MarketCapIcon />
             <h3>카테고리별 시가총액</h3>
           </div>
           <ul>
@@ -204,33 +200,9 @@ const Market = () => {
         </div>
       </section>
 
-      <ul className={styles.category}>
-        <li className={styles.toggle}>
-          <button
-            type='button'
-            onClick={handleChangeCurrent}
-            className={iscurrency ? `${styles.currentUSD}` : ''}
-            aria-label='toggle current'
-          >
-            <span>₩</span>
-            <span>$</span>
-          </button>
-        </li>
-      </ul>
+      <ToggleButton />
 
       <table className={styles.marketTable}>
-        <colgroup>
-          <col width='5%' />
-          <col width='3%' />
-          <col width='16%' />
-          <col width='6%' />
-          <col width='10%' />
-          <col width='12%' />
-          <col width='12%' />
-          <col width='12%' />
-          <col width='12%' />
-          <col width='12%' />
-        </colgroup>
         <thead>
           <tr>
             <th colSpan={2}>#</th>

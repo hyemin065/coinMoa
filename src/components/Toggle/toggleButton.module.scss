@@ -1,0 +1,46 @@
+@use '/src/styles/mixins/flexbox';
+@use '/src/styles/mixins/position';
+@use '/src/styles/constants/colors';
+
+.categoryToggle {
+  @include flexbox.flexbox(end, center);
+  margin-bottom: 10px;
+
+  button {
+    position: relative;
+    width: 55px;
+    height: 25px;
+    background: colors.$MAIN_COLOR;
+    border-radius: 6px;
+
+    &.currentUSD {
+      &::before {
+        left: 50%;
+      }
+    }
+
+    &::before {
+      position: absolute;
+      top: 2px;
+      left: 5%;
+      display: block;
+      width: 25px;
+      height: 21px;
+      content: '';
+      background-color: colors.$WHITE;
+      border: 1px solid colors.$WHITE;
+      border-radius: 6px;
+      transition: 0.3s;
+    }
+
+    span {
+      position: absolute;
+      top: 5px;
+      left: 9px;
+
+      &:last-child {
+        left: 37px;
+      }
+    }
+  }
+}

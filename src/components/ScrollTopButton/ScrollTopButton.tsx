@@ -1,9 +1,9 @@
-import { FormEvent } from 'react';
 import { TopArrowIcon } from '../../assets';
+
 import styles from './scrollTopButton.module.scss';
 
 const ScrollTopButton = () => {
-  const handleScrollTop = (e: FormEvent<HTMLButtonElement>) => {
+  const handleScrollTop = () => {
     if (!window.scrollY) return;
 
     window.scrollTo({

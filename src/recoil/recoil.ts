@@ -30,3 +30,8 @@ export const bookMarkCoinNameState = atom<string>({
   key: 'bookMarkCoinNameState',
   default: '',
 });
+
+export const currencyState = atom<boolean>({
+  key: 'currencyState',
+  default: false,
+});

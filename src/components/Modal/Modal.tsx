@@ -1,8 +1,8 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { bookMarkCoinNameState, coinListState, dateState, modalState } from '../../recoil/recoil';
 
+import { bookMarkCoinNameState, coinListState, dateState, modalState } from '../../recoil/recoil';
 import { addCoinApi, deleteCoinApi, getCoinSearchApi, updateCoinApi } from '../../services/getCoinApi';
 import { ISearchCoin, IUserCoinList } from '../../types/coin';
 import DateCalendar from '../DatePicker/DateCalendar';
@@ -22,6 +22,11 @@ interface ISearchValue {
 const Modal = () => {
   const uniqueId = localStorage.getItem('id');
 
+  const [isOpenModal, setIsOpenModal] = useRecoilState(modalState);
+  const userCoinList = useRecoilValue<IUserCoinList[]>(coinListState);
+  const bookMarkCoinName = useRecoilValue(bookMarkCoinNameState);
+  const date = useRecoilValue(dateState);
+
   const [marketValue, setMarketValue] = useState('upbit');
   const [searchValueId, setSearchValueId] = useState('');
   const [searchValueName, setSearchValueName] = useState('');
@@ -31,17 +36,11 @@ const Modal = () => {
   const [transaction, setTransaction] = useState('buy');
   const [transactionPrice, setTransactionPrice] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [isOpenModal, setIsOpenModal] = useRecoilState(modalState);
   const [isShowSearchResult, setIsShowSearchResult] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
-  const userCoinList = useRecoilValue<IUserCoinList[]>(coinListState);
-  const date = useRecoilValue(dateState);
   const modalRef = useRef<HTMLDivElement>(null);
-
   const selectCurrency = marketValue === 'binance' ? 'usd' : 'krw';
-
-  const bookMarkCoinName = useRecoilValue(bookMarkCoinNameState);
 
   const handleGetBookMark = async () => {
     if (bookMarkCoinName !== '') {
@@ -86,16 +85,16 @@ const Modal = () => {
     setMarketValue(e.currentTarget.value);
   };
 
+  const handleChangeTransaction = (item: string) => {
+    setTransaction(item);
+  };
+
   const handleChangeSearchInput = (item: ISearchValue) => {
     setSearchValueId(item.id);
     setSearchValueName(item.name);
     setSearchValueSymbol(item.symbol);
     setSearchValueThumb(item.thumb);
     setIsShowSearchResult(false);
-  };
-
-  const handleChangeTransaction = (item: string) => {
-    setTransaction(item);
   };
 
   const handleChangePrice = (e: ChangeEvent<HTMLInputElement>) => {
@@ -148,7 +147,7 @@ const Modal = () => {
     }
 
     if (portFolioCoin.length > 0 && quantity > 0) {
-      await updateCoinApi(
+      await updateCoinApi({
         portFolioCoin,
         uniqueId,
         searchValueId,
@@ -160,8 +159,8 @@ const Modal = () => {
         date,
         transaction,
         transactionPrice,
-        quantity
-      );
+        quantity,
+      });
       window.location.reload();
       setIsOpenModal(false);
 
@@ -171,7 +170,8 @@ const Modal = () => {
       }
     }
     if (portFolioCoin.length === 0 && transaction === 'buy' && quantity > 0) {
-      await addCoinApi(
+      await addCoinApi({
+        portFolioCoin,
         uniqueId,
         searchValueId,
         marketValue,
@@ -179,11 +179,11 @@ const Modal = () => {
         searchValueSymbol,
         searchValueThumb,
         selectCurrency,
-        transaction,
         date,
+        transaction,
         transactionPrice,
-        quantity
-      );
+        quantity,
+      });
 
       setIsOpenModal(false);
       window.location.reload();

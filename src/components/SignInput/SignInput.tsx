@@ -1,15 +1,16 @@
 import { ChangeEvent, FormEvent } from 'react';
+
 import styles from './input.module.scss';
 
 interface IProps {
   label: string;
   type: string;
   id: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   check: boolean;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onClick?: (e: FormEvent<HTMLButtonElement>) => void;
 }
-const SignInput = ({ label, type, id, onChange, check, onClick }: IProps) => {
+const SignInput = ({ label, type, id, check, onChange, onClick }: IProps) => {
   return (
     <>
       <label htmlFor={id} className={styles.signLabel}>

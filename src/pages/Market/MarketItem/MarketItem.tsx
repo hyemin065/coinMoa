@@ -1,8 +1,8 @@
 import { useRecoilValue } from 'recoil';
-import { StarActiveIcon, StarIcon } from '../../../assets';
 import { useUnitCommaData } from '../../../utils/useUnitCommaData';
 import { coinListState } from '../../../recoil/recoil';
 import { IMarketCoin, IUserCoinList } from '../../../types/coin';
+import { StarActiveIcon, StarIcon } from '../../../assets';
 
 import styles from './marketItem.module.scss';
 
@@ -15,6 +15,7 @@ interface IProps {
 const MarketItem = ({ currency, item, handleOpenModal, handleBookMarkGetName }: IProps) => {
   const bookMarkCoin = useRecoilValue<IUserCoinList[]>(coinListState);
   const currentPrice = useUnitCommaData(currency, item.current_price !== null ? item.current_price : 0);
+
   const highPrice = useUnitCommaData(currency, item.high_24h !== null ? item.high_24h : 0);
   const lowPrice = useUnitCommaData(currency, item.low_24h !== null ? item.low_24h : 0);
   const totalVolume = useUnitCommaData(currency, item.total_volume !== null ? item.total_volume : 0);
@@ -22,7 +23,6 @@ const MarketItem = ({ currency, item, handleOpenModal, handleBookMarkGetName }: 
 
   const bookMarkList = bookMarkCoin.map((items) => items.name);
   const bookMarkActive = bookMarkList.includes(item.name);
-
   return (
     <tr>
       <td className={styles.bookmark}>
@@ -46,9 +46,9 @@ const MarketItem = ({ currency, item, handleOpenModal, handleBookMarkGetName }: 
         </dl>
       </td>
       <td className={styles.symbol}>{item.symbol}</td>
-      <td>{currentPrice !== '0' ? `${currentPrice}` : '-'}</td>
-      <td>{highPrice !== '0' ? `${highPrice}` : '-'}</td>
-      <td>{lowPrice !== '0' ? `${lowPrice}` : '-'}</td>
+      <td>{currentPrice}</td>
+      <td>{highPrice}</td>
+      <td>{lowPrice}</td>
       <td
         className={
           item.price_change_percentage_24h !== null && item.price_change_percentage_24h > 0
@@ -58,8 +58,8 @@ const MarketItem = ({ currency, item, handleOpenModal, handleBookMarkGetName }: 
       >
         {item.price_change_percentage_24h !== null ? `${item.price_change_percentage_24h}%` : '-'}
       </td>
-      <td>{totalVolume !== '0' ? `${totalVolume}` : '-'}</td>
-      <td>{marketCap !== '0' ? `${marketCap}` : '-'}</td>
+      <td>{totalVolume}</td>
+      <td>{marketCap}</td>
     </tr>
   );
 };
