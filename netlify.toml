@@ -3,3 +3,8 @@ from = "/proxy/*"
   to = "https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest"
   status = 200
   force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
