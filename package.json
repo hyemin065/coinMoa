@@ -47,7 +47,7 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://pro-api.coinmarketcap.com",
+  "proxy": "https://pro-api.coinmarketcap.com",
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "eslint": "^8.16.0",
