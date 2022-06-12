@@ -47,12 +47,15 @@ const SignIn = () => {
         userId: id,
         userPassword: password,
       });
-      const { _id: uniqueId } = data.user[0];
-      if (data.success) {
-        navigate('/');
-        localStorage.setItem('userId', data.user[0].userId);
-        localStorage.setItem('id', uniqueId);
-        isSetLogin(true);
+
+      if (data.user) {
+        if (data.success) {
+          const { _id: uniqueId } = data.user[0];
+          navigate('/');
+          localStorage.setItem('userId', data.user[0].userId);
+          localStorage.setItem('id', uniqueId);
+          isSetLogin(true);
+        }
       } else {
         setloginFail('로그인 실패');
       }
