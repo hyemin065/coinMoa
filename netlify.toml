@@ -1,5 +1,7 @@
 [[redirects]]
+/api/*  https://pro-api.coinmarketcap.com/:splat  200
 from = "/proxy"
-  to = "https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest"  
+  to = "https://pro-api.coinmarketcap.com"
   status = 200
   force = true
+  headers = {X-CMC_PRO_API_KEY = "Netlify"}
