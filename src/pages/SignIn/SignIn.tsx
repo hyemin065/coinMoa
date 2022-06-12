@@ -2,7 +2,6 @@ import { ChangeEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { isLoginState } from '../../recoil/recoil';
-import axios from 'axios';
 
 import SignInput from '../../components/SignInput/SignInput';
 
