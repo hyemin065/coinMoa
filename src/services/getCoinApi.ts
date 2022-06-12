@@ -80,7 +80,12 @@ export const getTrendingCoin = async () => {
 
 export const getDominanceApi = async () => {
   try {
-    const res = await axios.get(`${PROXY}?CMC_PRO_API_KEY=${process.env.REACT_APP_API_KEY}`);
+    const res = await axios.get(`${PROXY}`, {
+      headers: {
+        'X-CMC_PRO_API_KEY': `${process.env.REACT_APP_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+    });
     return res.data.data;
   } catch (error) {
     throw new Error((error as Error).message);
