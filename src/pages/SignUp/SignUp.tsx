@@ -2,8 +2,8 @@ import axios from 'axios';
 import { ChangeEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import SignInput from '../../components/SignInput/SignInput';
 import { signUpApi } from '../../services/getUserApi';
+import SignInput from '../../components/SignInput/SignInput';
 
 import styles from './signUp.module.scss';
 
