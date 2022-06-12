@@ -146,10 +146,6 @@ const Market = () => {
           </div>
           <ul>
             <li>
-              <dl>
-                <dt>BTC.D</dt>
-                <dd>{`${dominance.btc_dominance}%`}</dd>
-              </dl>
               <p
                 className={dominance.btc_dominance_24h_percentage_change > 0 ? `${styles.plus}` : `${styles.minus}`}
               >{`${dominance.btc_dominance_24h_percentage_change.toFixed(2)}%`}</p>
