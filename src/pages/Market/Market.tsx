@@ -14,6 +14,7 @@ import TrendingIcon from '../../assets/trendingIcon.png';
 import upDownIcon from '../../assets/upDownIcon.png';
 import styles from './market.module.scss';
 import ToggleButton from '../../components/Toggle/ToggleButton';
+import { useNavigate } from 'react-router-dom';
 
 const PAGINATION = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -41,6 +42,9 @@ const Market = () => {
   });
   const [page, setPage] = useState(PAGINATION[0]);
 
+  const navigate = useNavigate();
+  const uniqueId = localStorage.getItem('id');
+
   const currentText = iscurrency ? 'USD' : 'KRW';
 
   const unitComma = useUnitCommaData;
@@ -61,11 +65,19 @@ const Market = () => {
   };
 
   const handleOpenModal = () => {
-    setIsOpenModal(true);
+    if (uniqueId !== null) {
+      setIsOpenModal(true);
+    } else {
+      setIsOpenModal(false);
+    }
   };
 
   const handleBookMarkGetName = (name: any) => {
-    setBookMarkCoinName(name);
+    if (uniqueId !== null) {
+      setBookMarkCoinName(name);
+    } else {
+      navigate('/signIn');
+    }
   };
 
   const getApiData = async () => {
