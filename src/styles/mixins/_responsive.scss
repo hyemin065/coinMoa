@@ -91,3 +91,15 @@
     @content;
   }
 }
+
+@mixin mobileHidden {
+  @media screen and (max-width: getMaxBreakpoint(MD)) {
+    display: none !important;
+  }
+}
+
+@mixin desktopHidden {
+  @media screen and (min-width: getMinBreakpoint(MD)) {
+    display: none !important;
+  }
+}
