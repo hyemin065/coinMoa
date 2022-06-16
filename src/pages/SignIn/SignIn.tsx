@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { isLoginState } from '../../recoil/recoil';
@@ -33,7 +33,8 @@ const SignIn = () => {
     setPasswordErrorMsg('');
   };
 
-  const signIn = async () => {
+  const handleSubmitSignIn = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (id === '') {
       setIdErrorMsg('아이디를 입력해주세요');
     }
@@ -68,22 +69,23 @@ const SignIn = () => {
       <p>
         회원이 아니신가요? <Link to='/signup'>회원가입</Link>
       </p>
+      <form onSubmit={handleSubmitSignIn}>
+        <div className={styles.formGroup}>
+          <SignInput label='아이디' type='text' id='id' onChange={handleChangeId} check={false} />
+          <p className={styles.error}>{idErrorMsg}</p>
+        </div>
 
-      <div className={styles.formGroup}>
-        <SignInput label='아이디' type='text' id='id' onChange={handleChangeId} check={false} />
-        <p className={styles.error}>{idErrorMsg}</p>
-      </div>
+        <div className={styles.formGroup}>
+          <SignInput label='비밀번호' type='password' id='password' onChange={handleChangePassword} check={false} />
+          <p className={styles.error}>{passwordErrorMsg}</p>
+        </div>
 
-      <div className={styles.formGroup}>
-        <SignInput label='비밀번호' type='password' id='password' onChange={handleChangePassword} check={false} />
-        <p className={styles.error}>{passwordErrorMsg}</p>
-      </div>
+        <p className={styles.error}>{loginFail}</p>
 
-      <p className={styles.error}>{loginFail}</p>
-
-      <button type='button' className={styles.signBtn} onClick={signIn}>
-        로그인
-      </button>
+        <button type='submit' className={styles.signBtn}>
+          로그인
+        </button>
+      </form>
     </section>
   );
 };

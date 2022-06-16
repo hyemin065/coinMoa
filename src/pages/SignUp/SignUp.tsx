@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { signUpApi, userCheckIdApi } from '../../services/getUserApi';
@@ -55,7 +55,8 @@ const SignUp = () => {
     }
   };
 
-  const signUp = async () => {
+  const handleSubmitSignUp = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setPasswordConfirmErrorMsg('');
 
     if (!idDuplicateCheck) {
@@ -101,30 +102,32 @@ const SignUp = () => {
           <p>
             이미 아이디가 있으신가요? <Link to='/signin'>로그인</Link>
           </p>
-          <div className={styles.formGroup}>
-            <SignInput label='아이디' type='text' id='id' onChange={handleChangeId} check onClick={handleisCheckId} />
-            <p className={isIdColor}>{idCheckMsg}</p>
-          </div>
+          <form onSubmit={handleSubmitSignUp}>
+            <div className={styles.formGroup}>
+              <SignInput label='아이디' type='text' id='id' onChange={handleChangeId} check onClick={handleisCheckId} />
+              <p className={isIdColor}>{idCheckMsg}</p>
+            </div>
 
-          <div className={styles.formGroup}>
-            <SignInput label='비밀번호' type='password' id='password' onChange={handleChangePassword} check={false} />
-            <p className={styles.error}>{passwordErrorMsg}</p>
-          </div>
+            <div className={styles.formGroup}>
+              <SignInput label='비밀번호' type='password' id='password' onChange={handleChangePassword} check={false} />
+              <p className={styles.error}>{passwordErrorMsg}</p>
+            </div>
 
-          <div className={styles.formGroup}>
-            <SignInput
-              label='비밀번호확인'
-              type='password'
-              id='passwordConfirm'
-              onChange={handleChangePasswordConfirm}
-              check={false}
-            />
-            <p className={styles.error}>{passwordConfirmErrorMsg}</p>
-          </div>
+            <div className={styles.formGroup}>
+              <SignInput
+                label='비밀번호확인'
+                type='password'
+                id='passwordConfirm'
+                onChange={handleChangePasswordConfirm}
+                check={false}
+              />
+              <p className={styles.error}>{passwordConfirmErrorMsg}</p>
+            </div>
 
-          <button type='button' onClick={signUp} className={styles.signBtn}>
-            회원가입
-          </button>
+            <button type='submit' className={styles.signBtn}>
+              회원가입
+            </button>
+          </form>
         </>
       )}
     </section>
