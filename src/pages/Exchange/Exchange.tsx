@@ -32,13 +32,13 @@ const Exchange = () => {
   return (
     <div className={styles.container}>
       <ScrollTopButton />
-      <section className={styles.titleWrap}>
+      <article className={styles.titleWrap}>
         <h2>암호화폐 현물 거래소</h2>
         <p>
           트래픽, 유동성, 거래량 및 보고된 거래량의
           <br /> 정당성에 대한 신뢰도를 기준으로 거래소의 순위를 매기고 거래량을 파악한 상위 100개의 거래소입니다.
         </p>
-      </section>
+      </article>
       <table className={styles.exchangeTable}>
         <colgroup>
           <col width='10%' />

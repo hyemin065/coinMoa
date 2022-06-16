@@ -80,7 +80,7 @@ const Market = () => {
     <div className={styles.container}>
       <ScrollTopButton />
 
-      <section className={styles.titleWrap}>
+      <article className={styles.titleWrap}>
         <h2>
           시가총액별 암호화폐 시세
           <span>({currentText})</span>
@@ -91,7 +91,7 @@ const Market = () => {
           COINMOA는 현재 13,442개의 암호화폐를 추적하고 있습니다. 현재 업계의 인기 있는 트렌드는 DeFi 및 Play to Earn
           입니다.
         </p>
-      </section>
+      </article>
 
       <MarketTopCard />
 

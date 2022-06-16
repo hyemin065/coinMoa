@@ -46,7 +46,7 @@ const MarketTopCard = () => {
   }, []);
 
   return (
-    <section className={styles.marketTop}>
+    <article className={styles.marketTop}>
       <div className={styles.trendWrap}>
         <div className={styles.title}>
           <img src={TrendingIcon} alt='trendIcon' />
@@ -136,7 +136,7 @@ const MarketTopCard = () => {
           </div>
         </>
       )}
-    </section>
+    </article>
   );
 };
 
