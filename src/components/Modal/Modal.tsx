@@ -193,7 +193,7 @@ const Modal = () => {
   };
 
   return ReactDOM.createPortal(
-    <div className={styles.modalWrap}>
+    <section className={styles.modalWrap}>
       <div className={styles.modalContainer} ref={modalRef}>
         <h3>거래소</h3>
         <div className={styles.radioWrap}>
@@ -259,16 +259,16 @@ const Modal = () => {
 
         <p className={styles.errorMsg}>{submitError}</p>
 
-        <div className={styles.buttonWrap}>
+        <article className={styles.buttonWrap}>
           <button type='button' onClick={handleSubmitAddCoin}>
             추가
           </button>
           <button type='button' onClick={handleCloseModal}>
             취소
           </button>
-        </div>
+        </article>
       </div>
-    </div>,
+    </section>,
     document.getElementById('modal') as HTMLElement
   );
 };
