@@ -2,30 +2,24 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
-import { bookMarkCoinNameState, coinListState, currencyState, isLoginState, modalState } from '../../recoil/recoil';
+import { bookMarkCoinNameState, coinListState, isLoginState, modalState } from '../../recoil/recoil';
 import { getPortFolioApi } from '../../services/getCoinApi';
 import { IUserCoinList } from '../../types/coin';
-import { useUnitCommaData } from '../../utils/useUnitCommaData';
 import Modal from '../../components/Modal/Modal';
-import ToggleButton from '../../components/Toggle/ToggleButton';
 import PortFolioItem from './PortFolioItem/PortFolioItem';
+import PortFolioAssets from './PortFolioAssets/PortFolioAssets';
 
 import styles from './portFolio.module.scss';
-
-const MARKET_CATE = ['binance', 'upbit', 'bithumb'];
-const CURRENCY_CATE = ['krw', 'usd'];
 
 const PortFolio = () => {
   const [userCoinList, setUserCoinList] = useRecoilState<IUserCoinList[]>(coinListState);
   const setBookMarkCoinName = useSetRecoilState(bookMarkCoinNameState);
-  const iscurrency = useRecoilValue(currencyState);
   const isLogin = useRecoilValue(isLoginState);
 
   const [marketList, setMarketCoinList] = useState<IUserCoinList[]>([]);
   const [isOpenModal, setIsOpenModal] = useRecoilState(modalState);
   const [marketValue, setMarketValue] = useState(false);
 
-  const unitComma = useUnitCommaData;
   const list = marketValue ? marketList : userCoinList;
 
   const handleOpenModal = () => {
@@ -34,14 +28,6 @@ const PortFolio = () => {
 
   const handleBookMarkGetName = (name: any) => {
     setBookMarkCoinName(name);
-  };
-
-  const handleShowMarketCoin = (value: string) => {
-    const marketCoins = userCoinList.filter((item) => {
-      return item.market === value;
-    });
-    setMarketValue(true);
-    setMarketCoinList(marketCoins);
   };
 
   const getPortFolio = async () => {
@@ -54,71 +40,11 @@ const PortFolio = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getCurrencyAssets = (value: string) => {
-    const currencyItem = userCoinList.filter((item) => item.currency === value);
-
-    const assetsItem = currencyItem.reduce((acc, cur) => {
-      const currencyAssets = {
-        krw: acc + cur.evaluationAmount,
-        usd: acc + cur.evaluationAmount,
-      }[value];
-      if (!currencyAssets) return 0;
-      return currencyAssets;
-    }, 0);
-
-    return assetsItem;
-  };
-
-  const totalAssets = CURRENCY_CATE.map((item) => getCurrencyAssets(item));
-
-  const handleGetMarketAssets = (marketVal: string) => {
-    const market = userCoinList.filter((item) => item.market === marketVal);
-
-    const marketTotalAssets = market.reduce((acc, cur) => {
-      const marketAssets = {
-        binance: acc + cur.evaluationAmount,
-        upbit: acc + cur.evaluationAmount,
-        bithumb: acc + cur.evaluationAmount,
-      }[marketVal];
-      if (!marketAssets) return 0;
-      return marketAssets;
-    }, 0);
-    return marketVal === 'binance'
-      ? `${unitComma(false, marketTotalAssets.toFixed(2))}`
-      : `${unitComma(true, marketTotalAssets.toFixed(2))}`;
-  };
-
   return (
     <div className={styles.container}>
       {isLogin ? (
         <>
-          <ul className={styles.assetsWrap}>
-            <li>
-              <button type='button' onClick={() => setMarketValue(false)}>
-                <h3>총자산</h3>
-                <p>
-                  {unitComma(iscurrency, iscurrency ? `${totalAssets[1].toFixed(2)}` : `${totalAssets[0].toFixed(2)}`)}
-                </p>
-              </button>
-              <div className={styles.toggle}>
-                <ToggleButton />
-              </div>
-            </li>
-
-            {MARKET_CATE.map((item) => {
-              return (
-                <li key={Math.random() * 1000}>
-                  <button type='button' onClick={() => handleShowMarketCoin(item)}>
-                    <span className={styles.marketName}>{item}</span>
-                    <h3>{item} 자산</h3>
-                    <p>{handleGetMarketAssets(item)}</p>
-                  </button>
-                  <div />
-                </li>
-              );
-            })}
-          </ul>
-
+          <PortFolioAssets setMarketValue={setMarketValue} setMarketCoinList={setMarketCoinList} />
           <div className={styles.portFolioContents}>
             {list.length > 0 ? (
               <>
