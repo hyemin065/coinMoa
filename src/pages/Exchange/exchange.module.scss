@@ -118,4 +118,14 @@
       }
     }
   }
+
+  .loadingWrap {
+    width: 100%;
+    min-height: calc(100vh - 190px);
+    @include flexbox.flexbox(center, center);
+
+    img {
+      width: 80px;
+    }
+  }
 }

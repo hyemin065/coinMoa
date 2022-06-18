@@ -37,6 +37,8 @@ const PortFolio = () => {
     if (data.length > 0) {
       setUserCoinList(data);
       setIsLoading(false);
+    } else {
+      setIsLoading(false);
     }
   };
 
@@ -48,64 +50,61 @@ const PortFolio = () => {
   return (
     <div className={styles.container}>
       {!isLoading ? (
-        <section className={styles.portFolioWrap}>
-          <PortFolioAssets setMarketValue={setMarketValue} setMarketCoinList={setMarketCoinList} />
-          <div className={styles.portFolioContents}>
-            {isLogin ? (
-              <div>
-                {list.length > 0 ? (
-                  <>
-                    <div className={styles.addBtn}>
-                      <button
-                        type='button'
-                        onClick={() => {
-                          handleOpenModal();
-                          handleBookMarkGetName('');
-                        }}
-                      >
-                        추가하기
-                      </button>
-                    </div>
-                    <table className={styles.portFolioTable}>
-                      <thead>
-                        <tr>
-                          <th>거래일</th>
-                          <th>거래소</th>
-                          <th colSpan={2}>코인</th>
-                          <th>현재가</th>
-                          <th>평단</th>
-                          <th>수량</th>
-                          <th>매수금액</th>
-                          <th>평가금액</th>
-                          <th>평가손익</th>
-                          <th>수익률</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {list.map((item: IUserCoinList) => {
-                          return <PortFolioItem key={`${item.market}_${item.symbol}`} item={item} />;
-                        })}
-                      </tbody>
-                    </table>
-                  </>
-                ) : (
-                  <div className={styles.addBtnWrap}>
-                    <button type='button' onClick={handleOpenModal}>
+        <div>
+          {isLogin ? (
+            <section className={styles.portFolioWrap}>
+              {list.length > 0 ? (
+                <>
+                  <PortFolioAssets setMarketValue={setMarketValue} setMarketCoinList={setMarketCoinList} />
+                  <div className={styles.addBtn}>
+                    <button
+                      type='button'
+                      onClick={() => {
+                        handleOpenModal();
+                        handleBookMarkGetName('');
+                      }}
+                    >
                       추가하기
                     </button>
                   </div>
-                )}
-              </div>
-            ) : (
-              <div className={styles.goLogin}>
-                <p>로그인 후 이용하실 수 있습니다</p>
-                <Link to='/signin'>로그인</Link>
-              </div>
-            )}
-
-            {isOpenModal && <Modal />}
-          </div>
-        </section>
+                  <table className={styles.portFolioTable}>
+                    <thead>
+                      <tr>
+                        <th>거래일</th>
+                        <th>거래소</th>
+                        <th colSpan={2}>코인</th>
+                        <th>현재가</th>
+                        <th>평단</th>
+                        <th>수량</th>
+                        <th>매수금액</th>
+                        <th>평가금액</th>
+                        <th>평가손익</th>
+                        <th>수익률</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {list.map((item: IUserCoinList) => {
+                        return <PortFolioItem key={`${item.market}_${item.symbol}`} item={item} />;
+                      })}
+                    </tbody>
+                  </table>
+                </>
+              ) : (
+                <div className={styles.addBtnWrap}>
+                  <button type='button' onClick={handleOpenModal}>
+                    추가하기
+                  </button>
+                </div>
+              )}
+            </section>
+          ) : (
+            <article className={styles.goLogin}>
+              <p>로그인 후 이용하실 수 있습니다</p>
+              <Link to='/signin'>로그인</Link>
+            </article>
+          )}
+          {isOpenModal && <Modal />}
+        </div>
       ) : (
         <div className={styles.loadingWrap}>
           <img src={Loading} alt='loading' />

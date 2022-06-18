@@ -13,44 +13,42 @@
     animation: smoothAppear 1.5s;
   }
 
-  .portFolioContents {
-    .addBtn {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 15px;
+  .addBtn {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
 
-      button {
-        padding: 10px 12px;
-        font-size: 14px;
-        color: colors.$SUB_COLOR;
-        background-color: colors.$MAIN_COLOR;
-        border-radius: 6px;
+    button {
+      padding: 10px 12px;
+      font-size: 14px;
+      color: colors.$SUB_COLOR;
+      background-color: colors.$MAIN_COLOR;
+      border-radius: 6px;
+    }
+  }
+
+  .portFolioTable {
+    width: 100%;
+    border-top: 1px solid colors.$SUB_COLOR;
+
+    tr {
+      th {
+        background: colors.$TABLE_THEAD_COLOR;
       }
     }
+  }
 
-    .portFolioTable {
-      width: 100%;
-      border-top: 1px solid colors.$SUB_COLOR;
+  .addBtnWrap {
+    width: 100%;
+    height: calc(100vh - 360px);
+    @include flexbox.flexbox(center, center);
 
-      tr {
-        th {
-          background: colors.$TABLE_THEAD_COLOR;
-        }
-      }
-    }
-
-    .addBtnWrap {
-      width: 100%;
-      height: calc(100vh - 360px);
-      @include flexbox.flexbox(center, center);
-
-      button {
-        padding: 10px 12px;
-        font-size: 14px;
-        color: colors.$SUB_COLOR;
-        background-color: colors.$MAIN_COLOR;
-        border-radius: 6px;
-      }
+    button {
+      padding: 10px 12px;
+      font-size: 14px;
+      color: colors.$SUB_COLOR;
+      background-color: colors.$MAIN_COLOR;
+      border-radius: 6px;
     }
   }
 
