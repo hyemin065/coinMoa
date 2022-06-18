@@ -1,11 +1,16 @@
 @use '/src/styles/mixins/flexbox';
 @use '/src/styles/mixins/position';
+@use '/src/styles/mixins/animation';
 @use '/src/styles/constants/colors';
 
 .container {
   width: 1200px;
   margin: 0 auto;
   color: colors.$WHITE;
+
+  .exchangeWrap {
+    animation: smoothAppear 1.5s;
+  }
 
   .titleWrap {
     margin-bottom: 30px;

@@ -1,11 +1,16 @@
 @use '/src/styles/mixins/flexbox';
 @use '/src/styles/constants/colors';
 @use '/src/styles/mixins/position';
+@use '/src/styles/mixins/animation';
 
 .container {
   width: 1200px;
   margin: 0 auto;
   color: colors.$WHITE;
+
+  .marketWrap {
+    animation: smoothAppear 1.5s;
+  }
 
   .titleWrap {
     margin-bottom: 30px;
@@ -108,6 +113,16 @@
           color: colors.$MAIN_COLOR;
         }
       }
+    }
+  }
+
+  .loadingWrap {
+    width: 100%;
+    min-height: calc(100vh - 190px);
+    @include flexbox.flexbox(center, center);
+
+    img {
+      width: 80px;
     }
   }
 }

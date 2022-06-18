@@ -10,7 +10,6 @@ import PortFolioItem from './PortFolioItem/PortFolioItem';
 import PortFolioAssets from './PortFolioAssets/PortFolioAssets';
 
 import styles from './portFolio.module.scss';
-
 import Loading from '../../assets/loading.gif';
 
 const PortFolio = () => {
@@ -49,7 +48,7 @@ const PortFolio = () => {
   return (
     <div className={styles.container}>
       {!isLoading ? (
-        <>
+        <section className={styles.portFolioWrap}>
           <PortFolioAssets setMarketValue={setMarketValue} setMarketCoinList={setMarketCoinList} />
           <div className={styles.portFolioContents}>
             {isLogin ? (
@@ -106,7 +105,7 @@ const PortFolio = () => {
 
             {isOpenModal && <Modal />}
           </div>
-        </>
+        </section>
       ) : (
         <div className={styles.loadingWrap}>
           <img src={Loading} alt='loading' />

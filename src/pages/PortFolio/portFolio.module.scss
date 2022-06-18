@@ -1,12 +1,17 @@
 @use '/src/styles/constants/colors';
 @use '/src/styles/mixins/flexbox';
 @use '/src/styles/mixins/position';
+@use '/src/styles/mixins/animation';
 
 .container {
   width: 1200px;
   min-height: calc(100vh - 190px);
   margin: 0 auto;
   color: colors.$WHITE;
+
+  .portFolioWrap {
+    animation: smoothAppear 1.5s;
+  }
 
   .portFolioContents {
     .addBtn {
